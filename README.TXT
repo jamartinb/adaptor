@@ -6,7 +6,17 @@ adaptors between stateful services. This is part of the ITACA toolbox
 (http://itaca.gisum.uma.es/) and it follows its convention regarding adaptation
 contracts and service specifications.
 
-The principal article behind adaptor.py is: http://goo.gl/0ii2F
+The principal article behind adaptor.py is:
+
+ * J.A. Martín and E. Pimentel. Learning from Failures: a Lightweight Approach
+   to Run-Time Behavioural Adaptation, FACS'11, 2011 - http://goo.gl/0ii2F
+
+... and it belongs to the ITACA toolbox:
+
+ * J. Camara, J.A. Martín, G. Salaun, J. Cubo, M. Ouederni, C. Canal, E.
+   Pimentel. ITACA: An integrated toolbox for the automatic composition and
+   adaptation of Web services, ICSE'09, 2009 - http://goo.gl/oFGe8
+
 
 The main script is itacalib/adaptor/adaptor.py but the general contents are the
 following:
