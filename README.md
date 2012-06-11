@@ -1,4 +1,5 @@
-                             -= ITACA - Adaptor =-
+ITACA - Adaptor
+===============
 
 This package includes the files require to synthesise or learn behavioural
 adaptors between stateful services. This is part of the ITACA toolbox
