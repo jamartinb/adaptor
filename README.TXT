@@ -27,7 +27,8 @@ Graphviz and gnuplot are recommended in order to plot the services and adaptors
 (these can be exported to the DOT language and visuaziled with Graphviz) and
 plotting graphs according to the measures given by learning adaptors.
 
--- Some examples --
+Some examples
+-------------
 
     > python2.7 -m itacalib.adaptor.adaptor -t
 
@@ -37,9 +38,9 @@ Executes the tests located in itacalib/tests.
 
 Displays help information
 
-    > DIR=itaca/samples/adaptor/ecows11/; python2.7 -m itacalib.adaptor.adaptor
-        -c $DIR/contract-5.xml $DIR/SPIN_sink.xml $DIR/SPIN_source.xml
-        $DIR/tiny_diffusion.xml --times 1000 -p EXAMPLE
+    > DIR=itaca/samples/adaptor/ecows11/; python2.7 -m itacalib.adaptor.adaptor \
+        -c $DIR/contract-5.xml $DIR/SPIN_sink.xml $DIR/SPIN_source.xml \
+        $DIR/tiny_diffusion.xml --times 1000 -p EXAMPLE \
 
 Run a basic learning adaptor based on the evaluation example of FACS'11
 (http://goo.gl/0ii2F -- where contracts and services are in directory $DIR)
