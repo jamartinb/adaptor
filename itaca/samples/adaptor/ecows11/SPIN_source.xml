@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!-- SPIN protocol for the source (a) ECOWS'11 
+     - It forces that one service receives the ADV
+     - It forces that the same services REQuests and
+     - receives the DATA.
+    -->
+<interface>
+	<signatures>
+		<signature name="a-end"/>
+		<signature name="a-adv"/>
+		<signature name="a-req"/>
+		<signature name="a-data"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="a-adv_em" name="a-adv" type="OUT"/>
+			<label id="a-end_em" name="a-end" type="OUT"/>
+			<label id="a-req_rec" name="a-req" type="IN"/>
+			<label id="a-data_em" name="a-data" type="OUT"/>
+		</labels>
+		<states>
+            <state id="s0" initial="True"/>
+            <state id="s1"/>
+            <state id="s2"/>
+            <state id="s3"/>
+            <state id="s4" final="True"/>
+		</states>
+		<transitions>
+            <transition label="a-adv_em" source="s0" target="s1"/>
+            <transition label="a-req_rec" source="s1" target="s2"/>
+            <transition label="a-data_em" source="s2" target="s3"/>
+            <transition label="a-end_em" source="s3" target="s4"/>
+		</transitions>
+	</protocol>
+</interface>

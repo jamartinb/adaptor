@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<contract>
+	<vectors>
+		<vector id="Verr">
+			<componentVector eventName="reply" eventType="IN" index="client"/>
+			<componentVector eventName="sqlError" eventType="OUT" index="server"/>
+		</vector>
+		<vector id="Vres">
+			<componentVector eventName="reply" eventType="IN" index="client"/>
+			<componentVector eventName="sqlValues" eventType="OUT" index="server"/>
+		</vector>
+		<vector id="Vdx">
+			<componentVector eventName="end" eventType="OUT" index="client"/>
+		</vector>
+		<vector id="Vreq">
+			<componentVector eventName="request" eventType="OUT" index="client"/>
+			<componentVector eventName="sqlQuery" eventType="IN" index="server"/>
+		</vector>
+		<vector id="Vlaunch">
+			<componentVector eventName="run" eventType="IN" index="client"/>
+		</vector>
+		<vector id="Vreset">
+			<componentVector eventName="id" eventType="IN" index="server"/>
+		</vector>
+		<vector id="Vcx">
+			<componentVector eventName="log" eventType="OUT" index="client"/>
+			<componentVector eventName="id" eventType="IN" index="server"/>
+		</vector>
+		<vector id="Vexit">
+			<componentVector eventName="exitCode" eventType="OUT" index="client"/>
+		</vector>
+	</vectors>
+	<LTS>
+		<states>
+			<state final="True" id="R4"/>
+			<state id="R0" initial="True"/>
+			<state id="R1"/>
+			<state id="R2"/>
+			<state id="R3"/>
+		</states>
+		<transitions>
+			<transition label="Vlaunch" source="R0" target="R1"/>
+			<transition label="Vcx" source="R1" target="R2"/>
+			<transition label="Vreq" source="R2" target="R2"/>
+			<transition label="Vres" source="R2" target="R2"/>
+			<transition label="Verr" source="R2" target="R2"/>
+			<transition label="Vreset" source="R2" target="R2"/>
+			<transition label="Vdx" source="R2" target="R3"/>
+			<transition label="Vexit" source="R3" target="R4"/>
+		</transitions>
+	</LTS>
+</contract>

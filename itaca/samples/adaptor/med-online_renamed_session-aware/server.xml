@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<interface height="390" width="250" ports="right" portorder="true">
+	<signatures>
+		<signature name="login">
+			<inputs>
+				<dataItem name="tstr"/>
+				<dataItem name="tstr"/>
+			</inputs>
+		</signature>
+		<signature name="reqDoc">
+			<inputs>
+				<dataItem name="tdate"/>
+			</inputs>
+		</signature>
+		<signature name="reqDocReply">
+			<outputs>
+				<dataItem name="tid"/>
+			</outputs>
+		</signature>
+		<signature name="srv_availability">
+			<inputs>
+				<dataItem name="tid"/>
+			</inputs>
+			<outputs>
+				<dataItem name="tdate"/>
+			</outputs>
+		</signature>
+		<signature name="reqSpec">
+			<inputs>
+				<dataItem name="tdate"/>
+			</inputs>
+		</signature>
+		<signature name="reqSpecReply">
+			<outputs>
+				<dataItem name="tid"/>
+			</outputs>
+		</signature>
+	</signatures>
+	<protocol>
+		<labels>
+            <label id="startS_EM" name="startS" type="OUT"/>
+            <label id="endS_EM" name="endS" type="OUT"/>
+			<label id="login_REC" name="login" type="IN" ord="0">
+				<dataItem name="usr"/>
+				<dataItem name="pwd"/>
+			</label>
+			<label id="srv_availability_REC" name="srv_availability" type="IN" ord="5">
+				<dataItem name="tkt"/>
+			</label>
+			<label id="srv_availability_EM" name="srv_availability" type="OUT" ord="4">
+				<dataItem name="d"/>
+			</label>
+			<label id="reqSpec_REC" name="reqSpec" type="IN" ord="3">
+				<dataItem name="d"/>
+			</label>
+			<label id="reqDoc_REC" name="reqDoc" type="IN" ord="1">
+				<dataItem name="d"/>
+			</label>
+			<label id="reqSpecReply_EM" name="reqSpecReply" type="OUT" ord="6">
+				<dataItem name="tkt"/>
+			</label>
+			<label id="reqDocReply_EM" name="reqDocReply" type="OUT" ord="2">
+				<dataItem name="tkt"/>
+			</label>
+		</labels>
+		<states>
+            <state id="00" initial="True"/>
+            <state id="99" final="True"/>
+			<state id="1" x="20" y="167"/>
+			<state id="0" x="112" y="169"/>
+			<state id="3" x="20" y="270"/>
+			<state id="2" x="63" y="68"/>
+			<state id="5" x="113" y="272"/>
+			<state id="4" x="65" y="360"/>
+		</states>
+		<transitions>
+            <transition label="startS_EM" source="00" target="0"/>
+            <transition label="endS_EM" source="0" target="99"/>
+			<transition label="login_REC" source="0" target="1" x="40" y="168"/>
+			<transition label="reqDoc_REC" source="1" target="2" x="19" y="91"/>
+			<transition label="reqDocReply_EM" source="2" target="0" x="111" y="86"/>
+			<transition label="reqSpec_REC" source="1" target="3" x="19" y="222"/>
+			<transition label="srv_availability_EM" source="3" target="4" x="13" y="335"/>
+			<transition label="srv_availability_REC" source="4" target="5" x="117" y="357"/>
+			<transition label="reqSpecReply_EM" source="5" target="0" x="113" y="223"/>
+		</transitions>
+	</protocol>
+</interface>

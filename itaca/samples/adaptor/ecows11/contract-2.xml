@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<!-- Contract for a, b and c of ECOWS'11 example -->
+<contract>
+	<vectors>
+        <vector id="VendA">
+            <componentVector eventName="a-end" eventType="OUT" index="a"/> <!-- SPIN_source -->
+        </vector>
+        <vector id="VendB">
+            <componentVector eventName="b-end" eventType="OUT" index="b"/> <!-- Tiny_intermediary -->
+        </vector>
+        <vector id="VendC">
+            <componentVector eventName="c-end" eventType="OUT" index="c"/> <!-- SPIN_sink -->
+        </vector>
+		<vector id="V1">
+			<componentVector eventName="c-req" eventType="OUT" index="c"/>
+			<componentVector eventName="interest" eventType="IN" index="b"/>
+		</vector>
+		<vector id="V2">
+			<componentVector eventName="interest" eventType="OUT" index="b"/>
+		</vector>
+		<vector id="V3">
+			<componentVector eventName="interest" eventType="OUT" index="b"/>
+			<componentVector eventName="a-req" eventType="IN" index="a"/>
+		</vector>
+		<vector id="V4">
+			<componentVector eventName="a-adv" eventType="OUT" index="a"/>
+		</vector>
+		<vector id="V5">
+			<componentVector eventName="a-data" eventType="OUT" index="a"/>
+			<componentVector eventName="data" eventType="IN" index="b"/>
+		</vector>
+		<vector id="V6">
+			<componentVector eventName="data" eventType="OUT" index="b"/>
+			<componentVector eventName="c-data" eventType="IN" index="c"/>
+		</vector>
+		<vector id="V7">
+			<componentVector eventName="c-adv" eventType="IN" index="c"/>
+		</vector>
+	</vectors>
+	<LTS>
+		<states>
+            <state id="R00" initial="True"/>
+            <state id="R1"/>
+            <state id="R2"/>
+            <state id="R900"/>
+            <state id="R990"/>
+            <state final="True" id="R999"/>
+		</states>
+		<transitions>
+            <transition label="V5" source="R00" target="R00"/>
+            <transition label="V6" source="R00" target="R00"/>
+            <transition label="V1" source="R00" target="R1"/>
+            <transition label="V2" source="R00" target="R1"/>
+            <transition label="V3" source="R00" target="R1"/>
+            <transition label="V4" source="R00" target="R1"/>
+            <transition label="V1" source="R1" target="R1"/>
+            <transition label="V2" source="R1" target="R1"/>
+            <transition label="V3" source="R1" target="R1"/>
+            <transition label="V4" source="R1" target="R1"/>
+            <transition label="V5" source="R1" target="R1"/>
+            <transition label="V6" source="R1" target="R1"/>
+            <transition label="V7" source="R1" target="R1"/>
+            <transition label="VendC" source="R1" target="R2"/>
+            <transition label="V2" source="R2" target="R2"/>
+            <transition label="V3" source="R2" target="R2"/>
+            <transition label="V4" source="R2" target="R2"/>
+            <transition label="V5" source="R2" target="R2"/>
+            <transition label="VendB" source="R2" target="R900"/>
+            <transition label="VendC" source="R0" target="R900"/>
+            <transition label="VendC" source="R1" target="R900"/>
+            <transition label="VendB" source="R900" target="R990"/>
+            <transition label="VendA" source="R990" target="R999"/>
+		</transitions>
+	</LTS>
+</contract>

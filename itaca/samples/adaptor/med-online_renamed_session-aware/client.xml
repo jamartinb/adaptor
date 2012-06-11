@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<interface height="342" width="290" portorder="true">
+	<signatures>
+		<signature name="replyS">
+			<inputs>
+				<dataItem name="tid"/>
+			</inputs>
+		</signature>
+		<signature name="cli_reqSpec">
+			<outputs>
+				<dataItem name="tdate"/>
+			</outputs>
+		</signature>
+		<signature name="user">
+			<outputs>
+				<dataItem name="tstr"/>
+			</outputs>
+		</signature>
+		<signature name="replyD">
+			<inputs>
+				<dataItem name="tid"/>
+			</inputs>
+		</signature>
+		<signature name="cli_reqDoc">
+			<outputs>
+				<dataItem name="tdate"/>
+			</outputs>
+		</signature>
+		<signature name="password">
+			<outputs>
+				<dataItem name="tstr"/>
+			</outputs>
+		</signature>
+	</signatures>
+	<protocol>
+		<labels>
+            <label id="startC_EM" name="startC" type="OUT"/>
+            <label id="endC_EM" name="endC" type="OUT"/>
+			<label id="replyD_REC" name="replyD" type="IN" ord="3">
+				<dataItem name="tkt"/>
+			</label>
+			<label id="password_EM" name="password" type="OUT" ord="1">
+				<dataItem name="pwd"/>
+			</label>
+			<label id="cli_reqDoc_EM" name="cli_reqDoc" type="OUT" ord="2">
+				<dataItem name="d"/>
+			</label>
+			<label id="user_EM" name="user" type="OUT" ord="0">
+				<dataItem name="usr"/>
+			</label>
+			<label id="replyS_REC" name="replyS" type="IN" ord="5">
+				<dataItem name="tkt"/>
+			</label>
+			<label id="cli_reqSpec_EM" name="cli_reqSpec" type="OUT" ord="4">
+				<dataItem name="d"/>
+			</label>
+		</labels>
+		<states>
+            <state id="00" initial="True"/>
+            <state id="99" final="True"/>
+			<state id="1" x="195" y="99"/>
+			<state id="0" x="194" y="47"/>
+			<state id="3" x="148" y="200"/>
+			<state id="2" x="195" y="149"/>
+			<state id="5" x="191" y="305"/>
+			<state id="4" x="149" y="263"/>
+			<state id="7" x="239" y="261"/>
+			<state id="6" x="238" y="201"/>
+		</states>
+		<transitions>
+            <transition label="startC_EM" source="00" target="0"/>
+            <transition label="endC_EM" source="5" target="99"/>
+			<transition label="user_EM" source="0" target="1" x="194" y="63"/>
+			<transition label="password_EM" source="1" target="2" x="195" y="120"/>
+			<transition label="TAU" source="2" target="3" x="145" y="146"/>
+			<transition label="cli_reqDoc_EM" source="3" target="4" x="149" y="226"/>
+			<transition label="replyD_REC" source="4" target="5" x="142" y="295"/>
+			<transition label="TAU" source="2" target="6" x="238" y="147"/>
+			<transition label="cli_reqSpec_EM" source="6" target="7" x="239" y="224"/>
+			<transition label="replyS_REC" source="7" target="5" x="247" y="297"/>
+		</transitions>
+	</protocol>
+</interface>

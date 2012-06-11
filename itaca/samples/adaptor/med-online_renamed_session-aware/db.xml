@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<interface height="128" width="237" ports="left" portorder="true">
+	<signatures>
+		<signature name="db_availability">
+			<inputs>
+				<dataItem name="tdate"/>
+			</inputs>
+			<outputs>
+				<dataItem name="tid"/>
+			</outputs>
+		</signature>
+	</signatures>
+	<protocol>
+		<labels>
+            <label id="startD_EM" name="startD" type="OUT"/>
+            <label id="endD_EM" name="endD" type="OUT"/>
+			<label id="db_availability_EM" name="db_availability" type="OUT" ord="1">
+				<dataItem name="tkt"/>
+			</label>
+			<label id="db_availability_REC" name="db_availability" type="IN" ord="0">
+				<dataItem name="d"/>
+			</label>
+		</labels>
+		<states>
+            <state id="00" initial="True"/>
+            <state id="99" final="True"/>
+			<state id="1" x="106" y="108"/>
+			<state id="0" x="160" y="48"/>
+		</states>
+		<transitions>
+            <transition label="startD_EM" source="00" target="0"/>
+            <transition label="endD_EM" source="0" target="99"/>
+			<transition label="db_availability_REC" source="0" target="1" x="161" y="98"/>
+			<transition label="db_availability_EM" source="1" target="0" x="99" y="64"/>
+		</transitions>
+	</protocol>
+</interface>

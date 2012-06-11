@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!-- DB example COORDINATION'11 -->
+<interface height="301" width="238">
+	<signatures>
+        <signature name="finish"/>
+        <signature name="getTicketDB"/>
+	</signatures>
+	<protocol>
+		<labels>
+            <label id="finish_em" name="finish" type="OUT"/>
+            <label id="getTicketDB_rec" name="getTicketDB" type="IN"/>
+            <label id="getTicketDB_em" name="getTicketDB" type="OUT"/>
+		</labels>
+		<states>
+            <state id="s0" initial="True"/>
+            <state id="s1"/>
+            <state id="s2" final="True"/>
+		</states>
+		<transitions>
+            <transition label="getTicketDB_rec" source="s0" target="s1"/>
+            <transition label="getTicketDB_em" source="s1" target="s0"/>
+            <transition label="finish_em" source="s0" target="s2"/>
+		</transitions>
+	</protocol>
+</interface>

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!-- SPIN protocol for the destination (c) ECOWS'11
+     - It can end the session right from the begining
+     - If it receives an ADV, it can end the session or...
+     - ... it can REQuest and receive the DATA.
+    -->
+<interface>
+	<signatures>
+		<signature name="c-end"/>
+		<signature name="c-adv"/>
+		<signature name="c-req"/>
+		<signature name="c-data"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="c-adv_rec" name="c-adv" type="IN"/>
+			<label id="c-end_em" name="c-end" type="OUT"/>
+			<label id="c-req_em" name="c-req" type="OUT"/>
+			<label id="c-data_rec" name="c-data" type="IN"/>
+		</labels>
+		<states>
+            <state id="s0" initial="True"/>
+            <state id="s1"/>
+            <state id="s2"/>
+            <state id="s3"/>
+            <state id="s4"/>
+            <state id="s5" final="True"/>
+		</states>
+		<transitions>
+            <transition label="c-adv_rec" source="s0" target="s1"/>
+            <transition label="TAU" source="s1" target="s2"/>
+            <transition label="c-end_em" source="s2" target="s5"/>
+            <transition label="TAU" source="s1" target="s3"/>
+            <transition label="c-req_em" source="s3" target="s4"/>
+            <transition label="c-data_rec" source="s4" target="s2"/>
+            <transition label="c-end_em" source="s0" target="s5"/>
+		</transitions>
+	</protocol>
+</interface>

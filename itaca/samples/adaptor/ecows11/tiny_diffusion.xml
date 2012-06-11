@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<!-- TinyDiffusion intermediary mote (b) for the example of ECOWS'11 
+     - It can either receive, forward and intermediate some data communication
+     - or it can communicate its own interest on some data (possibly with no answer)
+    -->
+<interface>
+	<signatures>
+        <signature name="interest"/>
+        <signature name="data"/>
+        <signature name="b-end"/>
+	</signatures>
+	<protocol>
+		<labels>
+            <label id="data_em" name="data" type="OUT"/>
+			<label id="data_rec" name="data" type="IN"/>
+            <label id="interest_em" name="interest" type="OUT"/>
+			<label id="interest_rec" name="interest" type="IN"/>
+            <label id="b-end_em" name="b-end" type="OUT"/>
+		</labels>
+		<states>
+            <state id="s0" initial="True"/>
+            <state id="s1"/>
+            <state id="s2"/>
+            <state id="s3"/>
+            <state id="s4"/>
+            <state id="s5" final="True"/>
+            <state id="s6"/>
+            <state id="s7"/>
+		</states>
+		<transitions>
+            <transition label="interest_rec" source="s0" target="s1"/>
+            <transition label="interest_em" source="s1" target="s2"/>
+            <transition label="data_rec" source="s2" target="s3"/>
+            <transition label="data_em" source="s3" target="s4"/>
+            <transition label="b-end_em" source="s4" target="s5"/>
+            <transition label="TAU" source="s0" target="s6"/>
+            <transition label="interest_em" source="s6" target="s7"/>
+            <transition label="data_rec" source="s7" target="s4"/>
+            <transition label="b-end_em" source="s6" target="s5"/>
+            <transition label="b-end_em" source="s7" target="s5"/>
+		</transitions>
+	</protocol>
+</interface>

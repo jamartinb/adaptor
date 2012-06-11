@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!-- Client example COORDINATION'11 -->
+<interface height="301" width="238">
+	<signatures>
+        <signature name="user"/>
+        <signature name="pass"/>
+		<signature name="appointment"/>
+		<signature name="denied"/>
+		<signature name="approved"/>
+		<signature name="endC"/>
+	</signatures>
+	<protocol>
+		<labels>
+            <label id="user_em" name="user" type="OUT"/>
+            <label id="endC_em" name="endC" type="OUT"/>
+			<label id="pass_em" name="pass" type="OUT"/>
+			<label id="appointment_em" name="appointment" type="OUT"/>
+			<label id="denied_rec" name="denied" type="IN"/>
+			<label id="approved_rec" name="approved" type="IN"/>
+		</labels>
+		<states>
+            <state id="s0" initial="True"/>
+            <state id="s1"/>
+            <state id="s2"/>
+            <state id="s3"/>
+            <state id="s4"/>
+            <state id="s5" final="True"/>
+		</states>
+		<transitions>
+            <transition label="user_em" source="s0" target="s1"/>
+            <transition label="pass_em" source="s1" target="s2"/>
+            <transition label="appointment_em" source="s2" target="s3"/>
+            <transition label="denied_rec" source="s3" target="s4"/>
+            <transition label="approved_rec" source="s3" target="s4"/>
+            <transition label="endC_em" source="s4" target="s5"/>
+		</transitions>
+	</protocol>
+</interface>

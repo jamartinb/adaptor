@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<contract>
+	<vectors>
+        <vector id="VavaR">
+            <componentVector eventName="srv_availability" eventType="OUT" index="server"/>
+            <componentVector eventName="db_availability" eventType="IN" index="db"/>
+        </vector>
+        <vector id="VavaY">
+            <componentVector eventName="srv_availability" eventType="IN" index="server"/>
+            <componentVector eventName="db_availability" eventType="OUT" index="db"/>
+        </vector>
+        <vector id="Vusr">
+            <componentVector eventName="user" eventType="OUT" index="client"/>
+        </vector>
+        <vector id="Vpass">
+            <componentVector eventName="password" eventType="OUT" index="client"/>
+            <componentVector eventName="login" eventType="IN" index="server"/>
+        </vector>
+        <vector id="VreqD">
+            <componentVector eventName="cli_reqDoc" eventType="OUT" index="client"/>
+            <componentVector eventName="reqDoc" eventType="IN" index="server"/>
+        </vector>
+        <vector id="VreqS">
+            <componentVector eventName="cli_reqSpec" eventType="OUT" index="client"/>
+            <componentVector eventName="reqSpec" eventType="IN" index="server"/>
+        </vector>
+        <vector id="VrepD">
+            <componentVector eventName="reqDocReply" eventType="OUT" index="server"/>
+            <componentVector eventName="replyD" eventType="IN" index="client"/>
+        </vector>
+        <vector id="VrepS">
+            <componentVector eventName="reqSpecReply" eventType="OUT" index="server"/>
+            <componentVector eventName="replyS" eventType="IN" index="client"/>
+        </vector>
+        <vector id="VstartC">
+            <componentVector eventName="startC" eventType="OUT" index="client"/>
+        </vector>
+        <vector id="VstartS">
+            <componentVector eventName="startS" eventType="OUT" index="server"/>
+        </vector>
+        <vector id="VstartD">
+            <componentVector eventName="startD" eventType="OUT" index="db"/>
+        </vector>
+        <vector id="VendC">
+            <componentVector eventName="endC" eventType="OUT" index="client"/>
+        </vector>
+        <vector id="VendS">
+            <componentVector eventName="endS" eventType="OUT" index="server"/>
+        </vector>
+        <vector id="VendD">
+            <componentVector eventName="endD" eventType="OUT" index="db"/>
+        </vector>
+	</vectors>
+	<LTS>
+		<states>
+            <state id="R000" initial="True"/>
+            <state id="R100"/>
+            <state id="R110"/>
+            <state id="R0"/>
+            <state id="R900"/>
+            <state id="R990"/>
+            <state id="R999" final="True"/>
+		</states>
+		<transitions>
+            <transition label="VstartC" source="R000" target="R100"/>
+            <transition label="VstartS" source="R100" target="R110"/>
+            <transition label="VstartD" source="R110" target="R0"/>
+            <transition label="VendC" source="R0" target="R900"/>
+            <transition label="VendS" source="R900" target="R990"/>
+            <transition label="VendD" source="R990" target="R999"/>
+            <transition label="VavaR" source="R0" target="R0"/>
+            <transition label="VavaY" source="R0" target="R0"/>
+            <transition label="VreqD" source="R0" target="R0"/>
+            <transition label="VreqS" source="R0" target="R0"/>
+            <transition label="VrepS" source="R0" target="R0"/>
+            <transition label="VrepD" source="R0" target="R0"/>
+            <transition label="Vusr" source="R0" target="R0"/>
+            <transition label="Vpass" source="R0" target="R0"/>
+		</transitions>
+	</LTS>
+</contract>

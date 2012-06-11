@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<composite name="system" width="600" height="500">
+	<interfaces>
+		<interface name="server" x="400" y="30"/>
+		<interface name="client" x="10" y="30"/>
+	</interfaces>
+	<contract name="contract"/>
+</composite>

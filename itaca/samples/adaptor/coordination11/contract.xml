@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<contract>
+	<vectors>
+        <vector id="VendC">
+            <componentVector eventName="endC" eventType="OUT" index="client"/>
+        </vector>
+        <vector id="VendS">
+            <componentVector eventName="endS" eventType="OUT" index="server"/>
+        </vector>
+        <vector id="VendDB">
+            <componentVector eventName="finish" eventType="OUT" index="db"/>
+        </vector>
+		<vector id="Vu">
+			<componentVector eventName="user" eventType="OUT" index="client"/>
+		</vector>
+		<vector id="Vl">
+			<componentVector eventName="pass" eventType="OUT" index="client"/>
+			<componentVector eventName="login" eventType="IN" index="server"/>
+		</vector>
+		<vector id="Vc">
+			<componentVector eventName="connected" eventType="OUT" index="server"/>
+		</vector>
+		<vector id="Vp">
+			<componentVector eventName="appointment" eventType="OUT" index="client"/>
+		</vector>
+		<vector id="Vr">
+			<componentVector eventName="request" eventType="IN" index="server"/>
+		</vector>
+		<vector id="Vg">
+			<componentVector eventName="getTicketDB" eventType="IN" index="db"/>
+			<componentVector eventName="getTicket" eventType="OUT" index="server"/>
+		</vector>
+		<vector id="Vt">
+			<componentVector eventName="getTicketDB" eventType="OUT" index="db"/>
+			<componentVector eventName="getTicket" eventType="IN" index="server"/>
+		</vector>
+		<vector id="Va">
+			<componentVector eventName="approved" eventType="IN" index="client"/>
+			<componentVector eventName="accepted" eventType="OUT" index="server"/>
+		</vector>
+		<vector id="Vd">
+			<componentVector eventName="denied" eventType="IN" index="client"/>
+			<componentVector eventName="rejected" eventType="OUT" index="server"/>
+		</vector>
+		<vector id="Vq">
+			<componentVector eventName="quit" eventType="IN" index="server"/>
+		</vector>
+	</vectors>
+	<LTS>
+		<states>
+            <state id="R00" initial="True"/>
+            <state id="R900"/>
+            <state id="R990"/>
+            <state final="True" id="R999"/>
+            <state id="R1"/>
+		</states>
+		<transitions>
+            <transition label="Vu" source="R00" target="R00"/>
+            <transition label="Vl" source="R00" target="R00"/>
+            <transition label="Vp" source="R00" target="R00"/>
+            <transition label="Vr" source="R00" target="R00"/>
+            <transition label="Vg" source="R00" target="R00"/>
+            <transition label="Vt" source="R00" target="R00"/>
+            <transition label="Va" source="R00" target="R00"/>
+            <transition label="Vd" source="R00" target="R00"/>
+            <transition label="Vq" source="R00" target="R00"/>
+            <transition label="Vc" source="R00" target="R1"/>
+            <transition label="Vu" source="R1" target="R1"/>
+            <transition label="Vl" source="R1" target="R1"/>
+            <transition label="Vc" source="R1" target="R1"/>
+            <transition label="Vp" source="R1" target="R1"/>
+            <transition label="Vr" source="R1" target="R1"/>
+            <transition label="Vg" source="R1" target="R1"/>
+            <transition label="Vt" source="R1" target="R1"/>
+            <transition label="Vd" source="R1" target="R1"/>
+            <transition label="Vq" source="R1" target="R1"/>
+            <transition label="Va" source="R1" target="R00"/>
+            <transition label="Vu" source="R00" target="R00"/>
+            <transition label="Vl" source="R00" target="R00"/>
+            <transition label="Vc" source="R00" target="R00"/>
+            <transition label="Vp" source="R00" target="R00"/>
+            <transition label="Vr" source="R00" target="R00"/>
+            <transition label="Vg" source="R00" target="R00"/>
+            <transition label="Vt" source="R00" target="R00"/>
+            <transition label="Va" source="R00" target="R00"/>
+            <transition label="Vd" source="R00" target="R00"/>
+            <transition label="Vq" source="R00" target="R00"/>
+            <transition label="VendC" source="R00" target="R900"/>
+            <transition label="VendS" source="R900" target="R990"/>
+            <transition label="VendDB" source="R990" target="R999"/>
+		</transitions>
+	</LTS>
+</contract>

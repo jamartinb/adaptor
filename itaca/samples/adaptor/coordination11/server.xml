@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<!-- Server COORDINATION'11 -->
+<interface height="213" width="256">
+	<signatures>
+		<signature name="endS"/>
+		<signature name="login"/>
+		<signature name="connected"/>
+		<signature name="request"/>
+		<signature name="quit"/>
+		<signature name="getTicket"/>
+		<signature name="accepted"/>
+		<signature name="rejected"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="login_rec" name="login" type="IN"/>
+			<label id="connected_em" name="connected" type="OUT"/>
+			<label id="quit_rec" name="quit" type="IN"/>
+			<label id="request_rec" name="request" type="IN"/>
+			<label id="getTicket_em" name="getTicket" type="OUT"/>
+			<label id="getTicket_rec" name="getTicket" type="IN"/>
+			<label id="accepted_em" name="accepted" type="OUT"/>
+			<label id="rejected_em" name="rejected" type="OUT"/>
+			<label id="endS_em" name="endS" type="OUT"/>
+		</labels>
+		<states>
+            <state id="s0" initial="True"/>
+            <state id="s1"/>
+            <state id="s2"/>
+            <state id="s3"/>
+            <state id="s4" final="True"/>
+            <state id="s5"/>
+            <state id="s6"/>
+            <state id="s7"/>
+            <state id="s8"/>
+            <state id="s9"/>
+            <state id="s10"/>
+            <state id="s11" final="True"/>
+		</states>
+		<transitions>
+            <transition label="endS_em" source="s0" target="s11"/>
+            <transition label="endS_em" source="s3" target="s4"/>
+            <transition label="login_rec" source="s0" target="s1"/>
+            <transition label="TAU" source="s1" target="s2"/>
+            <transition label="rejected_em" source="s2" target="s3"/>
+            <transition label="TAU" source="s1" target="s5"/>
+            <transition label="connected_em" source="s5" target="s6"/>
+            <transition label="quit_rec" source="s6" target="s3"/>
+            <transition label="request_rec" source="s6" target="s7"/>
+            <transition label="getTicket_em" source="s7" target="s8"/>
+            <transition label="getTicket_rec" source="s8" target="s9"/>
+            <transition label="accepted_em" source="s9" target="s10"/>
+            <transition label="quit_rec" source="s10" target="s3"/>
+		</transitions>
+	</protocol>
+</interface>

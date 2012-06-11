@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<interface height="213" width="256">
+	<signatures>
+		<signature name="sqlQuery"/>
+		<signature name="id"/>
+		<signature name="sqlError"/>
+		<signature name="sqlValues"/>
+		<signature name="startS"/>
+		<signature name="endS"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="sqlError_em" name="sqlError" type="OUT"/>
+			<label id="sqlQuery_rec" name="sqlQuery" type="IN"/>
+			<label id="id_rec" name="id" type="IN"/>
+			<label id="sqlValues_em" name="sqlValues" type="OUT"/>
+			<label id="startS_em" name="startS" type="OUT"/>
+			<label id="endS_em" name="endS" type="OUT"/>
+		</labels>
+		<states>
+            <state id="s00" initial="True"/>
+            <state id="s99" final="True"/>
+			<state id="s2" x="94" y="119"/>
+			<state id="s1" x="169" y="181"/>
+			<state id="s0" x="205" y="60"/>
+		</states>
+		<transitions>
+            <transition label="startS_em" source="s00" target="s0"/>
+            <transition label="endS_em" source="s0" target="s99"/>
+			<transition label="id_rec" source="s0" target="s1" x="198" y="135"/>
+			<transition label="sqlQuery_rec" source="s1" target="s2" x="104" y="165"/>
+			<transition label="sqlValues_em" source="s2" target="s0" x="99" y="115"/>
+			<transition label="sqlError_em" source="s2" target="s0" x="90" y="22"/>
+		</transitions>
+	</protocol>
+</interface>

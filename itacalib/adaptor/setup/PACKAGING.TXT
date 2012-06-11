@@ -1,0 +1,6 @@
+Link every file in this directory from the parent directory of itacalib and
+execute:
+
+    > python2.7 setup.py sdist
+
+The package will be created in the dist directory

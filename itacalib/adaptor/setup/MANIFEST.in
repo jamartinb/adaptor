@@ -1,0 +1,40 @@
+# coding=utf-8
+##
+# This file is part of ITACA-Adaptor.
+#
+# ITACA-Adaptor is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ITACA-Adaptor is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ITACA-Adaptor.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+recursive-include itacalib/adaptor *.py
+recursive-include itacalib/tests *.py
+include itacalib/__init__.py
+include itacalib/model/sts.py
+include itacalib/model/lts.py
+include itacalib/model/contract.py
+include itacalib/model/interface.py
+include itacalib/model/__init__.py
+include itacalib/GL/__init__.py
+include itacalib/XML/__init__.py
+include itacalib/XML/dot.py
+include itacalib/XML/stsxml*.py
+include itacalib/verification/synchronisation.py
+include itacalib/verification/__init__.py
+recursive-include itaca/samples/adaptor *
+include README.TXT
+include COPYING.TXT
+include itacalib/adaptor/setup/*
+include itacalib/adaptor/gnuplot/*
+include itacalib/adaptor/generate_stats.sh
+include itaca/samples/Acide/sql-server-v6/*
+
