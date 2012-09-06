@@ -160,6 +160,7 @@ class InputLabel(NLabel):
     def __init__(self,name):
         NLabel.__init__(self,name)
         self._type="IN"
+        # This following line is yet to be tested
         self.setId(name+"_REC");
 
     ##
@@ -174,6 +175,7 @@ class OutputLabel(NLabel):
     def __init__(self,name):
         NLabel.__init__(self,name)
         self._type="OUT"
+        # This following line is yet to be tested
         self.setId(name+"_EM");
         
     ##

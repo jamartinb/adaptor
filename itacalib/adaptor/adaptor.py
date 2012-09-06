@@ -176,8 +176,9 @@ class ContractAdaptor(STS):
         @param target: Name of the target state.
         @returns: Transition instance.
         """
-        labelName = label.getName();
-        self.addLabel(label);
+        # Don't really know why these two following lines :-(
+        labelName = str(label);
+        self._A[labelName] = label;
         transition = lts.Transition(source,labelName,target);
         log.debug("Learned transition: %s" % transition);
         self.addTransition(transition);
