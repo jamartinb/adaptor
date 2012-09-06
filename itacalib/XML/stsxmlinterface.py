@@ -235,7 +235,9 @@ def _interface2XML(doc, myinterface, myshape=None):
         _setAttribute(doc,label,"id",objLabel.getId())
         _setAttribute(doc,label,"name",objLabel.getName())
         _setAttribute(doc,label,"type",objLabel.getType())
-        _processData(doc,label,objLabel.getData())
+        if isinstance(objLabel, sts.DataInputLabel) or \
+                isinstance(objLabel, sts.DataOutputLabel):
+            _processData(doc,label,objLabel.getData())
         
         labels.appendChild(label)
     protocol.appendChild(labels)

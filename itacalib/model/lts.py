@@ -30,6 +30,7 @@ from copy import copy; # For copying STS with states.
 class Label(object):
     def __init__(self):
         self._type=None
+        self._id = None
     
     ##
     # Returns the label type code: TAU|IN|OUT. Handy for XML processing etc.
@@ -72,6 +73,17 @@ class Label(object):
         if self.isTau(): to_return ^= 10101;
         return to_return;
 
+    ##
+    # Returns the (optional) id of this label
+    # @defreturn str.
+    def getId(self):
+        return self._id;
+
+    ##
+    # Sets the (optional) id of this label
+    def setId(self,id):
+        self._id = id;
+
 
 ##
 # TAU unnamed Label
@@ -99,7 +111,7 @@ class TLabel(Label):
 class NLabel(Label):
     def __init__(self,name):
         Label.__init__(self)
-        self._name=name
+        self.setName(name);
 
     def cmp(self, other):
         return (self.name == other.name)
@@ -116,6 +128,7 @@ class NLabel(Label):
     # @param name Label name.
     def setName(self,name):
         self._name=name
+        self.setId(name);
     
     ##
     # Returns the object's representation as a string.
@@ -147,6 +160,7 @@ class InputLabel(NLabel):
     def __init__(self,name):
         NLabel.__init__(self,name)
         self._type="IN"
+        self.setId(name+"_REC");
 
     ##
     # Returns True if label is Input.
@@ -160,6 +174,7 @@ class OutputLabel(NLabel):
     def __init__(self,name):
         NLabel.__init__(self,name)
         self._type="OUT"
+        self.setId(name+"_EM");
         
     ##
     # Returns True if label is output.

@@ -26,7 +26,7 @@ Module which contains different adaptors
 #
 # Name:   adaptor.py
 # Author: José Antonio Martín Baena
-# Date:   01-11-2010
+# Date:   01-11-2010 -- 04-09-2012
 ##
 ########################################################################
 
@@ -55,6 +55,7 @@ try:
     import itacalib.XML.dot as dot;
     import itacalib.XML.stsxmlinterface as xml2sts;
     import itacalib.XML.stsxml as stsxml;
+    from itacalib.model.interface import Interface, Signature;
     from itacalib.verification.synchronisation import Synchroniser, \
             SynchroniserFeedback, SynchroniserFails, tracesToDot, \
             trace_to_string;
@@ -175,9 +176,8 @@ class ContractAdaptor(STS):
         @param target: Name of the target state.
         @returns: Transition instance.
         """
-        # Don't really know why these two following lines :-(
-        labelName = str(label);
-        self._A[labelName] = label;
+        labelName = label.getName();
+        self.addLabel(label);
         transition = lts.Transition(source,labelName,target);
         log.debug("Learned transition: %s" % transition);
         self.addTransition(transition);
@@ -718,6 +718,26 @@ def test():
     sys.exit(0);
 
 
+def writeAdaptorSTS(filename, adaptor):
+    # Write the adaptor in STS
+    # Create adaptor signature
+    adaptor_signature = Signature("");
+    #for label in adaptor.getLabels():
+    #    label_instance = adaptor.getLabel(label);
+    #    if label_instance.isInput():
+    #        adaptor_signature.addInput(label);
+    #    elif label_instance.isOutput():
+    #        adaptor_signature.addOutput(label);
+    #    else:
+    #        log.debug("Found a (possibly) TAU label");
+    # Create adaptor interface
+    adaptor_interface = Interface("LearningAdaptorInterface");
+    adaptor_interface.addSignature(adaptor_signature);
+    adaptor_interface.setSTS(adaptor);
+    # Write to file
+    xml2sts.writeXML(filename, adaptor_interface);
+
+
 def main():
     logging.basicConfig(level=logging.INFO);
     log.info( """ITACA - adaptor.py  Copyright (C) 2011 José Antonio Martín Baena 
@@ -766,15 +786,16 @@ you are welcome to redistribute it under certain conditions.
     if args.t:
         test();
 
-    if not(args.contract):
-        log.error("You must specify a contract with -c");
-        sys.exit(33);
+    #if not(args.contract):
+    #    log.error("You must specify a contract with -c");
+    #    sys.exit(33);
 
     if not(args.services):
         log.error("You must specify a one or more services S");
         sys.exit(34);
 
-    for path in args.services + [args.contract]:
+    paths = args.services + [args.contract] if args.contract else args.services;
+    for path in paths:
         if not os.path.exists(path):
             log.error("One of the given paths doesn't exist: %s" % path);
             sys.exit(3);
@@ -796,12 +817,20 @@ you are welcome to redistribute it under certain conditions.
             sys.exit(1);
 
     services = [];
+    # Load contract
     contract = None;
-    try:
-        contract = stsxml.readXML(args.contract);
-    except ExpatError, message:
-        log.error('The contract file ("%s") could not be parsed: \n\t%s' % (args.contract,message));
-        sys.exit(4);
+    if args.contract:
+        try:
+            contract = stsxml.readXML(args.contract);
+        except ExpatError, message:
+            log.error('The contract file ("%s") could not be parsed: \n\t%s' % (args.contract,message));
+            sys.exit(4);
+    elif not args.i:
+        log.error("If there is no contract (and thus no adaptor) there must "+
+                  "be an iteration limit '-i'");
+        sys.exit(11);
+
+    # Load services
     for filename in args.services:
         try:
             services.append(xml2sts.readXML(filename).getSTS());
@@ -817,7 +846,8 @@ you are welcome to redistribute it under certain conditions.
                                                       toWrite[i]);
 
         # Write the DOT file of the contract
-        dot.writeDOT("{0}_contract.dot".format(args.prefix), contract.getLTS());
+        if args.contract:
+            dot.writeDOT("{0}_contract.dot".format(args.prefix), contract.getLTS());
 
     stats_format = ("#{:0>2d} - {} {} (TER={:.2e}; ETER={:<.2e}): |I|={:>4d}; "
                     "|T|={:>4d}; E ={:4n}; F={:4n}; E/F={:4.0%}; "
@@ -850,52 +880,57 @@ you are welcome to redistribute it under certain conditions.
         accummulated_stats = (0,0,0,0);
 
         adaptor = None;
-        if args.sthr is not None:
-            log.info("Created an adaptor with static threshold {}".
-                     format(args.sthr));
-            adaptor = ThresholdAdaptor(contract);
-            adaptor.setThreshold(args.sthr);
-        elif args.dthr is not None:
-            log.info("Created an adaptor with dynamic threshold "
-                     "whose minimum is {}".format(args.dthr));
-            adaptor = DynamicThresholdAdaptor(contract);
-            adaptor.setThreshold(args.dthr);
-            adaptor.setMinimumThreshold(args.dthr);
-        elif args.athr is not None:
-            log.info("Created an adaptive adaptor "
-                     "whose minimum threshold is {}".format(args.athr));
-            adaptor = AdaptiveAdaptor(contract);
-            adaptor.setThreshold(args.athr);
-            adaptor.setMinimumThreshold(args.athr);
-        else:
-            log.info("Created an adaptor without threshold");
-            adaptor = LearningAdaptor(contract);
+        if args.contract:
+            if args.sthr is not None:
+                log.info("Created an adaptor with static threshold {}".
+                         format(args.sthr));
+                adaptor = ThresholdAdaptor(contract);
+                adaptor.setThreshold(args.sthr);
+            elif args.dthr is not None:
+                log.info("Created an adaptor with dynamic threshold "
+                         "whose minimum is {}".format(args.dthr));
+                adaptor = DynamicThresholdAdaptor(contract);
+                adaptor.setThreshold(args.dthr);
+                adaptor.setMinimumThreshold(args.dthr);
+            elif args.athr is not None:
+                log.info("Created an adaptive adaptor "
+                         "whose minimum threshold is {}".format(args.athr));
+                adaptor = AdaptiveAdaptor(contract);
+                adaptor.setThreshold(args.athr);
+                adaptor.setMinimumThreshold(args.athr);
+            else:
+                log.info("Created an adaptor without threshold");
+                adaptor = LearningAdaptor(contract);
 
         log.info("Using a synchroniser with traces with a maximum length of"
                  " {} transitions.".format(args.limit));
 
-        adaptor_and_services = [adaptor] + services;
+        adaptor_and_services = [adaptor] + services \
+                if args.contract else services;
 
         while continue_:
 
-            log.info("==== Synchronising services - iteration #{:d}.{:0>2d} =====".format(iteration,counter));
+            log.info("==== Synchronising services - iteration "+ \
+                     "#{:d}.{:0>2d} =====".format(iteration,counter));
 
             if dter:
                 args.ter = dter[counter-1];
 
             syn = SynchroniserFails(args.limit, args.ter);
-            syn.subscribe(adaptor.getSubscriber(0));
+            if adaptor:
+                syn.subscribe(adaptor.getSubscriber(0));
             traces = syn.synchronise(adaptor_and_services, times=args.times);
 
             # Gathering stats
             stats = syn.getStats();
             accummulated_stats = [x+y for (x, y) in \
                     zip(accummulated_stats,stats)];
-            calculated_stats = calculate_stats(counter, syn, adaptor, 
+            if adaptor:
+                calculated_stats = calculate_stats(counter, syn, adaptor, 
                                                traces, args.ter)
-            samples[iteration][counter-1] = calculated_stats;
-            log.info("Iter. stats "+
-                     stats_format.format(*calculated_stats));
+                samples[iteration][counter-1] = calculated_stats;
+                log.info("Iter. stats "+
+                         stats_format.format(*calculated_stats));
             #if args.stats is not None and args.population == 1:
             #    args.stats.write(file_format.format(*calculated_stats));
             syn.resetStats();
@@ -909,11 +944,15 @@ you are welcome to redistribute it under certain conditions.
                 tracesFile.close();
 
                 # Write the adaptor 
-                dot.writeDOT("{0}_adaptor_{1!s}.dot".format(args.prefix,counter), \
-                        adaptor);
+                if adaptor:
+                    dot.writeDOT("{0}_adaptor_{1!s}.dot".format(args.prefix, \
+                            counter), adaptor);
+                    writeAdaptorSTS("{0}_adaptor_{1!s}.xml".format( \
+                            args.prefix, counter), adaptor);
+
 
             # Shall we continue one iteration more?
-            inhibited = adaptor.resetInhibitedCount();
+            inhibited = adaptor is None or adaptor.resetInhibitedCount();
             continue_ = (args.i is None and inhibited != 0) or \
                     (args.i is not None and counter < args.i);
 
@@ -921,36 +960,41 @@ you are welcome to redistribute it under certain conditions.
             counter += 1;
 
     stats = accummulated_stats;
-    log.info("Acc. stats  "+
-             stats_format.format(*calculate_stats(99, stats, adaptor, 
-                                                  traces, args.ter)));
+    if adaptor:
+        log.info("Acc. stats  "+
+              stats_format.format(*calculate_stats(99, stats, adaptor, 
+                                                   traces, args.ter)));
     
     if args.prefix:
         log.info("Writing raw final traces...");
         resultFile = open("{0}_raw_traces.txt".format(args.prefix), "w");
         resultFile.write(repr(traces));
         resultFile.close();
-        log.info("Writing the condensed adaptor...");
-        dot.writeDOT("{0}_adaptor_final.dot".\
-                format(args.prefix), 
-                itacalib.adaptor.condense_adaptor.condense_adaptor(adaptor));
+        if adaptor:
+            log.info("Writing the condensed adaptor...");
+            condensed_adaptor = \
+                    itacalib.adaptor.condense_adaptor.condense_adaptor(adaptor);
+            dot.writeDOT("{0}_adaptor_final.dot".\
+                    format(args.prefix), condensed_adaptor);
+            writeAdaptorSTS("{0}_adaptor_final.xml".format( \
+                    args.prefix), condensed_adaptor);
 
-        # Verifying that the condensed adaptor is CORRECT
-        syn = SynchroniserFeedback(args.limit);
-        final_adaptor = STS();
-        final_adaptor.setStates(adaptor.getStates());
-        final_adaptor.setInitial(adaptor.getInitial());
-        final_adaptor.setFinals(adaptor.getFinals());
-        final_adaptor.setLabels(adaptor.getLabels());
-        final_adaptor.setTransitions(adaptor.getTransitions());
-        final_adaptor.getExploredTransitions = \
-                lambda: final_adaptor.getTransitions();
-        final_adaptor.inhibited = adaptor.inhibited;
-        adaptor_and_services = [final_adaptor] + services;
-        traces = syn.synchronise(adaptor_and_services);
-        log.info("Final stats " + 
-                stats_format.format(*calculate_stats(99, syn.getStats(), 
-                final_adaptor, traces, args.ter)));
+            # Verifying that the condensed adaptor is CORRECT
+            syn = SynchroniserFeedback(args.limit);
+            final_adaptor = STS();
+            final_adaptor.setStates(adaptor.getStates());
+            final_adaptor.setInitial(adaptor.getInitial());
+            final_adaptor.setFinals(adaptor.getFinals());
+            final_adaptor.setLabels(adaptor.getLabels());
+            final_adaptor.setTransitions(adaptor.getTransitions());
+            final_adaptor.getExploredTransitions = \
+                    lambda: final_adaptor.getTransitions();
+            final_adaptor.inhibited = adaptor.inhibited;
+            adaptor_and_services = [final_adaptor] + services;
+            traces = syn.synchronise(adaptor_and_services);
+            log.info("Final stats " + 
+                    stats_format.format(*calculate_stats(99, syn.getStats(), 
+                    final_adaptor, traces, args.ter)));
 
 
     log.info("Writing stats...");
