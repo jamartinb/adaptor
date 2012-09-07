@@ -750,9 +750,10 @@ you are welcome to redistribute it under certain conditions.
         "services and contract.");
     group_adaptor = parser.add_mutually_exclusive_group();
     group_ter = parser.add_mutually_exclusive_group();
-    parser.add_argument('-c', '--contract', metavar="C", 
+    group_contract = parser.add_mutually_exclusive_group(required=True);
+    group_contract.add_argument('-c', '--contract', metavar="C", 
             help="the adaptation contract");
-    parser.add_argument('-t', help="run a test", action='store_true');
+    group_contract.add_argument('-t', help="run a test", action='store_true');
     parser.add_argument('-p', '--prefix', metavar="P", 
             help="the prefix of the output files");
     parser.add_argument('-l', '--limit', metavar="L", type=int, default=20, \
@@ -787,15 +788,11 @@ you are welcome to redistribute it under certain conditions.
     if args.t:
         test();
 
-    #if not(args.contract):
-    #    log.error("You must specify a contract with -c");
-    #    sys.exit(33);
-
     if not(args.services):
         log.error("You must specify a one or more services S");
         sys.exit(34);
 
-    paths = args.services + [args.contract] if args.contract else args.services;
+    paths = args.services + [args.contract];
     for path in paths:
         if not os.path.exists(path):
             log.error("One of the given paths doesn't exist: %s" % path);
@@ -820,23 +817,19 @@ you are welcome to redistribute it under certain conditions.
     services = [];
     # Load contract
     contract = None;
-    if args.contract:
-        try:
-            contract = stsxml.readXML(args.contract);
-        except ExpatError, message:
-            log.error('The contract file ("%s") could not be parsed: \n\t%s' % (args.contract,message));
-            sys.exit(4);
-    elif not args.i:
-        log.error("If there is no contract (and thus no adaptor) there must "+
-                  "be an iteration limit '-i'");
-        sys.exit(11);
+    try:
+        contract = stsxml.readXML(args.contract);
+    except ExpatError, message:
+        log.error('The contract file ("%s") could not be parsed: \n\t%s' % (args.contract,message));
+        sys.exit(4);
 
     # Load services
     for filename in args.services:
         try:
             services.append(xml2sts.readXML(filename).getSTS());
         except ExpatError, message:
-            log.error('One of the given service files ("%s") could not be parsed: \n\t%s' % (file,message));
+            log.error('One of the given service files '+
+                      '("%s") could not be parsed: \n\t%s' % (file,message));
             sys.exit(5);
 
     # Write input in DOT files for services
@@ -847,8 +840,7 @@ you are welcome to redistribute it under certain conditions.
                                                       toWrite[i]);
 
         # Write the DOT file of the contract
-        if args.contract:
-            dot.writeDOT("{0}_contract.dot".format(args.prefix), contract.getLTS());
+        dot.writeDOT("{0}_contract.dot".format(args.prefix), contract.getLTS());
 
     stats_format = ("#{:0>2d} - {} {} (TER={:.2e}; ETER={:<.2e}): |I|={:>4d}; "
                     "|T|={:>4d}; E ={:4n}; F={:4n}; E/F={:4.0%}; "
@@ -881,34 +873,31 @@ you are welcome to redistribute it under certain conditions.
         accummulated_stats = (0,0,0,0);
 
         adaptor = None;
-        if args.contract:
-            if args.sthr is not None:
-                log.info("Created an adaptor with static threshold {}".
-                         format(args.sthr));
-                adaptor = ThresholdAdaptor(contract);
-                adaptor.setThreshold(args.sthr);
-            elif args.dthr is not None:
-                log.info("Created an adaptor with dynamic threshold "
-                         "whose minimum is {}".format(args.dthr));
-                adaptor = DynamicThresholdAdaptor(contract);
-                adaptor.setThreshold(args.dthr);
-                adaptor.setMinimumThreshold(args.dthr);
-            elif args.athr is not None:
-                log.info("Created an adaptive adaptor "
-                         "whose minimum threshold is {}".format(args.athr));
-                adaptor = AdaptiveAdaptor(contract);
-                adaptor.setThreshold(args.athr);
-                adaptor.setMinimumThreshold(args.athr);
-            else:
-                log.info("Created an adaptor without threshold");
-                adaptor = LearningAdaptor(contract);
+        if args.sthr is not None:
+            log.info("Created an adaptor with static threshold {}".
+                     format(args.sthr));
+            adaptor = ThresholdAdaptor(contract);
+            adaptor.setThreshold(args.sthr);
+        elif args.dthr is not None:
+            log.info("Created an adaptor with dynamic threshold "
+                     "whose minimum is {}".format(args.dthr));
+            adaptor = DynamicThresholdAdaptor(contract);
+            adaptor.setThreshold(args.dthr);
+            adaptor.setMinimumThreshold(args.dthr);
+        elif args.athr is not None:
+            log.info("Created an adaptive adaptor "
+                     "whose minimum threshold is {}".format(args.athr));
+            adaptor = AdaptiveAdaptor(contract);
+            adaptor.setThreshold(args.athr);
+            adaptor.setMinimumThreshold(args.athr);
+        else:
+            log.info("Created an adaptor without threshold");
+            adaptor = LearningAdaptor(contract);
 
         log.info("Using a synchroniser with traces with a maximum length of"
                  " {} transitions.".format(args.limit));
 
-        adaptor_and_services = [adaptor] + services \
-                if args.contract else services;
-
+        adaptor_and_services = [adaptor] + services;
         while continue_:
 
             log.info("==== Synchronising services - iteration "+ \
@@ -918,20 +907,18 @@ you are welcome to redistribute it under certain conditions.
                 args.ter = dter[counter-1];
 
             syn = SynchroniserFails(args.limit, args.ter);
-            if adaptor:
-                syn.subscribe(adaptor.getSubscriber(0));
+            syn.subscribe(adaptor.getSubscriber(0));
             traces = syn.synchronise(adaptor_and_services, times=args.times);
 
             # Gathering stats
             stats = syn.getStats();
             accummulated_stats = [x+y for (x, y) in \
                     zip(accummulated_stats,stats)];
-            if adaptor:
-                calculated_stats = calculate_stats(counter, syn, adaptor, 
-                                               traces, args.ter)
-                samples[iteration][counter-1] = calculated_stats;
-                log.info("Iter. stats "+
-                         stats_format.format(*calculated_stats));
+            calculated_stats = calculate_stats(counter, syn, adaptor, 
+                                           traces, args.ter)
+            samples[iteration][counter-1] = calculated_stats;
+            log.info("Iter. stats "+
+                     stats_format.format(*calculated_stats));
             #if args.stats is not None and args.population == 1:
             #    args.stats.write(file_format.format(*calculated_stats));
             syn.resetStats();
@@ -945,11 +932,10 @@ you are welcome to redistribute it under certain conditions.
                 tracesFile.close();
 
                 # Write the adaptor 
-                if adaptor:
-                    dot.writeDOT("{0}_adaptor_{1!s}.dot".format(args.prefix, \
-                            counter), adaptor);
-                    writeAdaptorSTS("{0}_adaptor_{1!s}.xml".format( \
-                            args.prefix, counter), adaptor);
+                dot.writeDOT("{0}_adaptor_{1!s}.dot".format(args.prefix, \
+                        counter), adaptor);
+                writeAdaptorSTS("{0}_adaptor_{1!s}.xml".format( \
+                        args.prefix, counter), adaptor);
 
 
             # Shall we continue one iteration more?
@@ -961,9 +947,8 @@ you are welcome to redistribute it under certain conditions.
             counter += 1;
 
     stats = accummulated_stats;
-    if adaptor:
-        log.info("Acc. stats  "+
-              stats_format.format(*calculate_stats(99, stats, adaptor, 
+    log.info("Acc. stats  "+
+          stats_format.format(*calculate_stats(99, stats, adaptor, 
                                                    traces, args.ter)));
     
     if args.prefix:
@@ -971,31 +956,30 @@ you are welcome to redistribute it under certain conditions.
         resultFile = open("{0}_raw_traces.txt".format(args.prefix), "w");
         resultFile.write(repr(traces));
         resultFile.close();
-        if adaptor:
-            log.info("Writing the condensed adaptor...");
-            condensed_adaptor = \
-                    itacalib.adaptor.condense_adaptor.condense_adaptor(adaptor);
-            dot.writeDOT("{0}_adaptor_final.dot".\
-                    format(args.prefix), condensed_adaptor);
-            writeAdaptorSTS("{0}_adaptor_final.xml".format( \
-                    args.prefix), condensed_adaptor);
+        log.info("Writing the condensed adaptor...");
+        condensed_adaptor = \
+                itacalib.adaptor.condense_adaptor.condense_adaptor(adaptor);
+        dot.writeDOT("{0}_adaptor_final.dot".\
+                format(args.prefix), condensed_adaptor);
+        writeAdaptorSTS("{0}_adaptor_final.xml".format( \
+                args.prefix), condensed_adaptor);
 
-            # Verifying that the condensed adaptor is CORRECT
-            syn = SynchroniserFeedback(args.limit);
-            final_adaptor = STS();
-            final_adaptor.setStates(adaptor.getStates());
-            final_adaptor.setInitial(adaptor.getInitial());
-            final_adaptor.setFinals(adaptor.getFinals());
-            final_adaptor.setLabels(adaptor.getLabels());
-            final_adaptor.setTransitions(adaptor.getTransitions());
-            final_adaptor.getExploredTransitions = \
-                    lambda: final_adaptor.getTransitions();
-            final_adaptor.inhibited = adaptor.inhibited;
-            adaptor_and_services = [final_adaptor] + services;
-            traces = syn.synchronise(adaptor_and_services);
-            log.info("Final stats " + 
-                    stats_format.format(*calculate_stats(99, syn.getStats(), 
-                    final_adaptor, traces, args.ter)));
+        # Verifying that the condensed adaptor is CORRECT
+        syn = SynchroniserFeedback(args.limit);
+        final_adaptor = STS();
+        final_adaptor.setStates(adaptor.getStates());
+        final_adaptor.setInitial(adaptor.getInitial());
+        final_adaptor.setFinals(adaptor.getFinals());
+        final_adaptor.setLabels(adaptor.getLabels());
+        final_adaptor.setTransitions(adaptor.getTransitions());
+        final_adaptor.getExploredTransitions = \
+                lambda: final_adaptor.getTransitions();
+        final_adaptor.inhibited = adaptor.inhibited;
+        adaptor_and_services = [final_adaptor] + services;
+        traces = syn.synchronise(adaptor_and_services);
+        log.info("Final stats " + 
+                stats_format.format(*calculate_stats(99, syn.getStats(), 
+                final_adaptor, traces, args.ter)));
 
 
     log.info("Writing stats...");

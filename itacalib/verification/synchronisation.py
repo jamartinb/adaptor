@@ -44,6 +44,13 @@ log.setLevel(logging.INFO);
 #logging.basicConfig(level=logging.DEBUG);
 #logging.basicConfig();
 
+# Used in main()
+import argparse;
+import sys;
+import os;
+from xml.parsers.expat import ExpatError;
+import itacalib.XML.stsxmlinterface as xml2sts;
+
 
 
 class Synchroniser(object):
@@ -601,4 +608,56 @@ def __cstate_to_string(step):
         return '(('+to_return+'))';
     else:
         return to_return;
+
+
+def main():
+    """
+    Performs every possible synchronisation among the given services (in STS)
+    and it writes to file the resulting traces (in DOT)
+    """
+    logging.basicConfig(level=logging.INFO);
+    log.info( """ITACA - synchronisation.py  Copyright (C) 2010 José Antonio Martín Baena 
+This program comes with ABSOLUTELY NO WARRANTY. This is free software, and 
+you are welcome to redistribute it under certain conditions.
+""");
+    parser = argparse.ArgumentParser(description="Returns all the possible "+
+            "traces during the synchronisation among the given services");
+    parser.add_argument("services", metavar='S', \
+            help="services to synchronise", type=str, nargs="+");
+    parser.add_argument('-l','--limit', metavar='L', type=int, default=20, \
+            help="depth limit during the synchronisation, default = 20");
+    parser.add_argument('-o','--output', metavar='O', \
+            type=argparse.FileType('w'), \
+            help="where to store the resulting traces");
+
+    args = parser.parse_args();
+
+    for path in args.services:
+        if not os.path.exists(path):
+            log.error("One of the given services doesn't exist: {}".format( \
+                    path));
+            sys.exit(3);
+
+    services = [];
+    for filename in args.services:
+        try:
+            services.append(xml2sts.readXML(filename).getSTS());
+        except ExpatError, message:
+            log.error('One of the given service files '+ \
+                      '("%s") could not be parsed: \n\t%s' % (file,message));
+            sys.exit(5);
+
+    log.info("Synchronising...");
+    syn = Synchroniser(args.limit);
+    traces = syn.synchronise(services);
+
+    if args.output:
+        log.info("Writing the resulting traces...");
+        args.output.write(tracesToDot(traces));
+
+
+
+
+if __name__ == "__main__":
+    main();
 
