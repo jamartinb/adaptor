@@ -34,7 +34,7 @@ def suite():
     module_names = ["adaptortest", "detadaptortest", \
             "learning_adaptortest", "nonfailing_adaptortest", \
             "failing_adaptortest", "thr_adaptortest", \
-            "dthr_adaptortest"];
+            "dthr_adaptortest", "multiple_adaptor_test"];
 
     return unittest.TestLoader().loadTestsFromNames(\
             ["itacalib.tests.adaptor."+name for name in module_names]);

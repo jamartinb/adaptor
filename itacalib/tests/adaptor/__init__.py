@@ -17,4 +17,5 @@
 
 __all__ = ["adaptortest", "learning_adaptortest", "expected_results", \
         "detadaptortest", "failing_adaptortest", "nonfailing_adaptortesta", \
-        "adaptor_optimisation_test", "dthr_adaptortest", "all_tests"];
+        "adaptor_optimisation_test", "dthr_adaptortest", "all_tests", \
+        "multiple_adaptor_test"];

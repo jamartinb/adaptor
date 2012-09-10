@@ -30,12 +30,13 @@
 import unittest;
 import logging;
 import xml;
+import itacalib.XML.dot as dot;
 import itacalib.XML.stsxmlinterface as xml2sts;
 import itacalib.XML.stsxml as stsxml;
 import itacalib.adaptor.adaptor as adaptor;
 import itacalib.verification.synchronisation as synchronisation;
 
-from expected_results import simple_invoke_LA_SA
+from expected_results import simple_invoke_LA_SA, simple_reord_LA_SA
 
 
 ## Logger for this module
@@ -47,7 +48,7 @@ class MultipleAdaptorTest(unittest.TestCase):
 
 
     def test_identity_adaptor(self):
-        """Tests that identyty adaptors do not interfere with each other
+        """Tests that identity adaptors do not interfere with each other
 
         Two compatible services (a simple INVOKE) are mediated with two
         learning adaptors with identity contracts.
@@ -77,6 +78,46 @@ class MultipleAdaptorTest(unittest.TestCase):
         everything[3:] = [services[1]]
         traces = syn.synchronise(everything)
         self.assertEqual(traces,simple_invoke_LA_SA)
+
+
+    def test_reorder_adaptor(self):
+        """Tests that identity adaptors do not interfere with each other
+
+        Two services which need reordering are mediated with two
+        learning adaptors with identity contracts.
+
+        Actions have been renamed to force the interaction through one
+        adaptor and then another.
+        """
+        dir="../../../itaca/samples/adaptor/simple-reord/"
+        syn = synchronisation.SynchroniserFeedback()
+        contracts = []
+        adaptors = []
+        services = []
+        try:
+            for i in range(1,3):
+                contracts.append(stsxml.readXML(
+                    "{}contracts_{}.xml".format(dir,i)))
+                adaptors.append(adaptor.LearningAdaptor(contracts[i-1]))
+                syn.subscribe(adaptors[i-1].getSubscriber(i))
+                services.append(xml2sts.readXML(
+                    "{}s{}.xml".format(dir,i)).getSTS())
+        except xml.parsers.expat.ExpatError, message:
+            log.fatal('One of the given files could not be parsed: \n\t%s' \
+                    % message);
+        everything = []
+        everything[0:] = [services[0]]
+        everything[1:] = adaptors
+        everything[3:] = [services[1]]
+        continue_ = True
+        while continue_:
+            traces = syn.synchronise(everything)
+            continue_ = sum([a.resetInhibitedCount() for a in adaptors]) > 0
+        with open("REORD_traces.dot",'w') as f:
+            f.write(synchronisation.tracesToDot(traces))
+        dot.writeDOT("REORD_adaptor_1.dot",adaptors[0])
+        dot.writeDOT("REORD_adaptor_2.dot",adaptors[1])
+        self.assertEqual(traces,simple_reord_LA_SA)
 
 
         
