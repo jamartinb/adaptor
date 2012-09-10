@@ -939,7 +939,7 @@ you are welcome to redistribute it under certain conditions.
 
 
             # Shall we continue one iteration more?
-            inhibited = adaptor is None or adaptor.resetInhibitedCount();
+            inhibited = adaptor.resetInhibitedCount();
             continue_ = (args.i is None and inhibited != 0) or \
                     (args.i is not None and counter < args.i);
 
