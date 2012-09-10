@@ -66,8 +66,7 @@ class FailingAdaptorTest(LearningAdaptorTest):
             self.fail("There is a trace in the adaptor "+ \
                     "which is not valid {0!s}".format(counter_example));
 
-    def assert_same_language(self, result, expected):
-        """IT IS NOT THE SAME LANGUAGE, it is a SUBLANGUAGE, instead"""
+    def assert_successful_example(self, result, expected):
         self.assert_sub_language(result, expected);
 
 

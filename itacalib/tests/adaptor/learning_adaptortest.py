@@ -184,7 +184,7 @@ class LearningAdaptorTest(DetContractAdaptorTest):
         expected = sql_server_v6_LA_13;
         #self.assertEqual(result,expected);
         log.debug("Resulted traces: {0!r}".format(result));
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
 
                 
     def test_sql_server_v6_session_aware(self):
@@ -195,7 +195,7 @@ class LearningAdaptorTest(DetContractAdaptorTest):
         expected = sql_server_v6_LA_SA_14;
         #self.assertEqual(result,expected);
         log.debug("Resulted traces: {0!r}".format(result));
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
         self.assert_correct_adaptor(result);
 
 
@@ -209,7 +209,7 @@ class LearningAdaptorTest(DetContractAdaptorTest):
         #self.assertEqual(result,expected);
         log.debug("Resulted traces: {0!r}".format(result));
         #logging.getLogger('synchronisation').setLevel(logging.WARN);
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
         self.assert_correct_adaptor(result);
 
 
@@ -223,7 +223,7 @@ class LearningAdaptorTest(DetContractAdaptorTest):
         #self.assertEqual(result,expected);
         log.debug("Resulted traces: {0!r}".format(result));
         #logging.getLogger('synchronisation').setLevel(logging.WARN);
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
         self.assert_correct_adaptor(result);
 
 

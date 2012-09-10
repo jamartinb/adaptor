@@ -63,7 +63,7 @@ class DetContractAdaptorTest(ContractAdaptorTest):
         result = self.runAdaptation(dir,example);
         expected = sql_server_v6_DA_10;
         #self.assertEqual(result,expected);
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
 
 
 del ContractAdaptorTest

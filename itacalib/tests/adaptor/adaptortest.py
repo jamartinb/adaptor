@@ -148,6 +148,12 @@ class ContractAdaptorTest(unittest.TestCase):
         return to_return;
 
 
+    def assert_successful_example(self, result, expected):
+        """Assertion to compare the example result and its expected outcome
+        """
+        self.assert_same_language(result, expected);
+
+
     def assert_same_language(self,result,expected):
         counter_example = is_same_accepted_language(result,expected);
         if counter_example:
@@ -183,7 +189,7 @@ class ContractAdaptorTest(unittest.TestCase):
         expected = sql_server_v6_CA_10;
         #self.assertEqual(result,expected);
         #self.assertEqual(len(result),len(expected));
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
 
 
 

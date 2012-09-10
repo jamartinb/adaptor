@@ -49,9 +49,6 @@ log = logging.getLogger('dthr_adaptortest')
 class DynamicThresholdAdaptorTest(FailingAdaptorTest):
 
 
-    actual_assert_same_language = LearningAdaptorTest.assert_same_language;
-
-
     class DTHRAdaptorWithTests(DynamicThresholdAdaptor):
 
 
@@ -97,7 +94,7 @@ class DynamicThresholdAdaptorTest(FailingAdaptorTest):
         # To assert same language and not sub-language as it is done
         # in FailingAdaptorTest.
         self.assert_correct_adaptor(result);
-        self.actual_assert_same_language(result,expected);
+        self.assert_same_language(result,expected);
 
 
 

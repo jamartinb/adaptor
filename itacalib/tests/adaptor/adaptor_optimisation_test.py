@@ -71,7 +71,7 @@ class OptimisationAdaptorTest(LearningAdaptorTest):
         expected = sql_server_v6_LA_SA_14;
         #self.assertEqual(result,expected);
         log.debug("Resulted traces: {0!r}".format(result));
-        self.assert_same_language(result,expected);
+        self.assert_successful_example(result,expected);
 
 
     def test_ecows11_optimisation(self):
@@ -84,7 +84,7 @@ class OptimisationAdaptorTest(LearningAdaptorTest):
         #expected = sql_server_v6_LA_SA_14;
         #self.assertEqual(result,expected);
         #log.debug("Resulted traces: {0!r}".format(result));
-        #self.assert_same_language(result,expected);
+        #self.assert_successful_example(result,expected);
 
 
     @staticmethod
