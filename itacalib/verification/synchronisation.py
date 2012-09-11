@@ -362,20 +362,36 @@ class SynchroniserFeedback(Synchroniser):
     def synchronise(self,listOfSts,currentTrace=(),limit=None, times=None):
 
         if times and times > 1:
+            # This delegate will call back this synchronise with proper 
+            # initialization and times=1
             return Synchroniser.synchronise(self, listOfSts,
                     currentTrace, limit, times);
+
+        # Due to the previous if, from here on there will be a single trace
+        assert times is None or currentTrace is not (), \
+                "A variable (currentTrace) was not properly initialised"
 
         self._transitions += 1;
         # Delegate on Synchroniser the actual work
         new_traces = Synchroniser.synchronise(self, listOfSts, currentTrace, 
                                               limit, times);
 
+        # If times is selected, then there must be a single trace at most
+        assert times is None or len(new_traces) < 2, \
+                "A problem occurred running random traces"
+
         if currentTrace is not () and currentTrace[-1][-1]:
             self._successful_trace(currentTrace);
 
         if len(new_traces) == 1 and currentTrace in new_traces and \
                 not currentTrace[-1][-1]:
+            # If no synchronisation was possible the single returned trace 
+            # is the same as the current trace
             self._unfinished_trace(currentTrace);
+        elif len(new_traces) == 1 and len(list(new_traces)[0]) == 1 and \
+                not list(new_traces)[0][-1][-1]:
+            # The trace is the initial, non-final state
+            self._unfinished_trace(list(new_traces)[0]);
 
         return new_traces;
 

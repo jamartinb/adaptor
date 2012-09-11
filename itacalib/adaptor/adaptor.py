@@ -409,6 +409,19 @@ class LearningAdaptor(DetContractAdaptor):
         return transitions;
 
 
+    def _empty_adaptor(self):
+        """The adaptor inhibits everything and thus it is empty
+
+        This method is called when it inhibits the initial state"""
+
+        log.debug("The adaptor is empty");
+
+        # Inhibit any remaining outgoing transition
+        map(self.inhibit, self.outgoingTransitions(self.getInitial()));
+
+
+
+
     def inhibit(self,transition):
         """From now on, this adaptor inhibits the given transition.
 
@@ -467,6 +480,8 @@ class LearningAdaptor(DetContractAdaptor):
             """
             if reason is not SynchroniserFeedback.UNFINISHED_TRACE:
                 return;
+            log.debug("Notified about an UNFINISHED_TRACE: {}".format(\
+                    details));
             #log.warn("The dreadful trace is : {}".format(trace_to_string(details,0)));
             if not details:
                 log.warn("Something strange is happening inhibiting on real time");
@@ -476,9 +491,12 @@ class LearningAdaptor(DetContractAdaptor):
                 to_inhibit = self.adaptor.incomingTransitions(adaptor_current_state);
                 if len(to_inhibit) > 1:
                     log.warn("More than 1 incoming transitions!");
-                for t in to_inhibit:
-                    log.debug("Inhibiting on real time: {0!r}".format(t));
-                    self.adaptor.inhibit(t);
+                elif len(to_inhibit) == 0:
+                    self.adaptor._empty_adaptor();
+                else:
+                    for t in to_inhibit:
+                        log.debug("Inhibiting on real time: {0!r}".format(t));
+                        self.adaptor.inhibit(t);
 
 
 
@@ -575,6 +593,7 @@ class ForgettingAdaptor(LearningAdaptor):
 
     def forget(self):
         """Forgets everything learned so far."""
+        log.debug("Forgetting everything");
         self.forgetTransitions(self.inhibited);
 
 
@@ -687,6 +706,24 @@ class DynamicThresholdAdaptor(ThresholdAdaptor):
             log.debug("Reseting to avoid empty adaptor! (Explored states: "
                      "{})".format(len(self.getExploredStates())));
         self._threshold = 0;
+
+
+class ResetAdaptor(ForgettingAdaptor):
+    """Learning adaptor which forgets everything when it becomes empty
+
+    This adaptor behaves as a LearningAdaptor but, if it tries to inhibit the
+    non-final initial state, then it resets the set of inhibited traces (it
+    forgets everything which has learnt so far) in order to allow any
+    successful trace
+    """
+
+
+    def _empty_adaptor(self):
+        """Forget everything when the adaptor becomes empty"""
+        # Call the parent, overriden method
+        ForgettingAdaptor._empty_adaptor(self); 
+        # Forget everything
+        self.forget();
 
 
 
