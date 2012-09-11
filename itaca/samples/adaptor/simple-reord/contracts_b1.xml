@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<contract>
+	<vectors>
+		<vector id="v_0">
+			<componentVector eventName="3:a" eventType="IN" index="adaptor2"/>
+			<componentVector eventName="1:a" eventType="OUT" index="c1"/>
+		</vector>
+		<vector id="v_1">
+			<componentVector eventName="3:b" eventType="OUT" index="adaptor2"/>
+			<componentVector eventName="1:b" eventType="IN" index="c1"/>
+		</vector>
+	</vectors>
+	<LTS>
+		<states>
+			<state id="s0" initial="True"/>
+			<state id="s1"/>
+			<state id="s2"/>
+			<state final="True" id="s3"/>
+		</states>
+		<transitions>
+			<transition label="v_0" source="s0" target="s1"/>
+			<transition label="v_1" source="s1" target="s3"/>
+			<transition label="v_1" source="s0" target="s2"/>
+			<transition label="v_0" source="s2" target="s3"/>
+		</transitions>
+	</LTS>
+</contract>

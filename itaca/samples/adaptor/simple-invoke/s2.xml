@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<interface height="179" width="205">
+	<signatures>
+		<signature name="2:a"/>
+		<signature name="2:b"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="2:b_EM" name="2:b" type="OUT"/>
+			<label id="2:a_REC" name="2:a" type="IN"/>
+		</labels>
+		<states>
+			<state id="1" x="108" y="107"/>
+			<state id="0" initial="True" x="67" y="54"/>
+			<state final="True" id="2" x="158" y="162"/>
+		</states>
+		<transitions>
+			<transition label="2:b_EM" source="1" target="2" x="72" y="80"/>
+			<transition label="2:a_REC" source="0" target="1" x="131" y="117"/>
+		</transitions>
+	</protocol>
+</interface>
