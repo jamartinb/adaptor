@@ -31,11 +31,10 @@ import unittest;
 import logging;
 import xml;
 import itacalib.XML.dot as dot;
-import itacalib.XML.stsxmlinterface as xml2sts;
-import itacalib.XML.stsxml as stsxml;
 import itacalib.adaptor.adaptor as adaptor;
 import itacalib.adaptor.condense_adaptor as condense_adaptor;
 import itacalib.verification.synchronisation as synchronisation;
+from itacalib.tests.adaptor.adaptortest import AdaptorTest;
 
 from expected_results import simple_invoke_LA_SA, simple_reord_LA_SA,\
         simple_reord_b_LA_SA
@@ -46,7 +45,12 @@ log = logging.getLogger('multiple_adaptor_test')
 
 
 
-class MultipleAdaptorTest(unittest.TestCase):
+class MultipleAdaptorTest(AdaptorTest):
+
+
+
+    def buildAdaptor(self, contract):
+        return adaptor.LearningAdaptor(contract);
 
 
     def test_identity_adaptor(self):
@@ -63,17 +67,13 @@ class MultipleAdaptorTest(unittest.TestCase):
         contracts = []
         adaptors = []
         services = []
-        try:
-            for i in range(1,3):
-                contracts.append(stsxml.readXML(
-                    "{}contracts_{}.xml".format(dir,i)))
-                adaptors.append(adaptor.LearningAdaptor(contracts[i-1]))
-                syn.subscribe(adaptors[i-1].getSubscriber(i))
-                services.append(xml2sts.readXML(
-                    "{}s{}.xml".format(dir,i)).getSTS())
-        except xml.parsers.expat.ExpatError, message:
-            log.fatal('One of the given files could not be parsed: \n\t%s' \
-                    % message);
+        for i in range(1,3):
+            contracts.append(self.loadContract(self.relativePaths(dir,
+                    ["contracts_{}.xml".format(i)])));
+            adaptors.append(self.buildAdaptor(contracts[i-1]));
+            syn.subscribe(adaptors[i-1].getSubscriber(i))
+            services.extend(self.loadServices(self.relativePaths(dir,
+                    ["s{}.xml".format(i)])));
         everything = []
         everything[0:] = [services[0]]
         everything[1:] = adaptors
@@ -96,17 +96,13 @@ class MultipleAdaptorTest(unittest.TestCase):
         contracts = []
         adaptors = []
         services = []
-        try:
-            for i in range(1,3):
-                contracts.append(stsxml.readXML(
-                    "{}contracts_a{}.xml".format(dir,i)))
-                adaptors.append(adaptor.LearningAdaptor(contracts[i-1]))
-                syn.subscribe(adaptors[i-1].getSubscriber(i))
-                services.append(xml2sts.readXML(
-                    "{}s{}.xml".format(dir,i)).getSTS())
-        except xml.parsers.expat.ExpatError, message:
-            log.fatal('One of the given files could not be parsed: \n\t%s' \
-                    % message);
+        for i in range(1,3):
+            contracts.append(self.loadContract(self.relativePaths(dir,
+                    ["contracts_a{}.xml".format(i)])));
+            adaptors.append(self.buildAdaptor(contracts[i-1]));
+            syn.subscribe(adaptors[i-1].getSubscriber(i))
+            services.extend(self.loadServices(self.relativePaths(dir,
+                    ["s{}.xml".format(i)])));
         everything = []
         everything[0:] = [services[0]]
         everything[1:] = adaptors
@@ -124,7 +120,7 @@ class MultipleAdaptorTest(unittest.TestCase):
                 f.write(synchronisation.tracesToDot(traces))
             dot.writeDOT("REORD_adaptor_1.dot",adaptors[0])
             dot.writeDOT("REORD_adaptor_2.dot",adaptors[1])
-        self.assertEqual(traces,simple_reord_LA_SA)
+        self.assert_same_language(traces,simple_reord_LA_SA)
 
         
     def test_reorder_conflict(self):
@@ -145,28 +141,13 @@ class MultipleAdaptorTest(unittest.TestCase):
         contracts = []
         adaptors = []
         services = []
-        try:
-            for i in range(1,3):
-
-                # Loading the contract
-                contracts.append(stsxml.readXML(
-                    "{}contracts_b{}.xml".format(dir,i)))
-
-                # Loading the adaptor
-                # These are ResetAdaptors but the reset feature
-                # is not needed
-                adaptors.append(adaptor.ResetAdaptor(contracts[i-1]))
-                # And subscribing to incorrect traces
-                syn.subscribe(adaptors[i-1].getSubscriber(i))
-
-                # Loading services
-                services.append(xml2sts.readXML(
-                    "{}s{}.xml".format(dir,i)).getSTS())
-
-        except xml.parsers.expat.ExpatError, message:
-            log.fatal('One of the given files could not be parsed: \n\t%s' \
-                    % message);
-
+        for i in range(1,3):
+            contracts.append(self.loadContract(self.relativePaths(dir,
+                    ["contracts_b{}.xml".format(i)])));
+            adaptors.append(self.buildAdaptor(contracts[i-1]));
+            syn.subscribe(adaptors[i-1].getSubscriber(i))
+            services.extend(self.loadServices(self.relativePaths(dir,
+                    ["s{}.xml".format(i)])));
         everything = []
         everything[0:] = [services[0]]
         everything[1:] = adaptors
@@ -209,7 +190,7 @@ class MultipleAdaptorTest(unittest.TestCase):
                         condense_adaptor.condense_adaptor(adaptors[i-1]));
 
         # Assertions
-        self.assertEqual(traces, simple_reord_b_LA_SA);
+        self.assert_same_language(traces, simple_reord_b_LA_SA);
 
 
 #logging.basicConfig()

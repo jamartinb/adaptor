@@ -47,4 +47,5 @@ setup(name='ITACA-Adaptor',
         packages = packages,
         package_data = {'itaca':files},
         license="GPLv3",
+        scripts=["scripts/adaptor", "scripts/synchronisation"],
         );

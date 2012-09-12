@@ -48,7 +48,7 @@ log = logging.getLogger('adaptortest')
 #logging.basicConfig(level=logging.DEBUG);
 logging.basicConfig();
 
-class ContractAdaptorTest(unittest.TestCase):
+class AdaptorTest(unittest.TestCase):
     
 
     LIMIT = 10;
@@ -179,6 +179,10 @@ class ContractAdaptorTest(unittest.TestCase):
             return;
         for trace in sorted(traces, lambda x, y: len(x) - len(y)):
             self.assertTrue(trace[-1][-1], "A trace was not successful\n Trace: {!r}".format(trace));
+
+
+
+class ContractAdaptorTest(AdaptorTest):
 
 
     def test_sql_server_v6(self):

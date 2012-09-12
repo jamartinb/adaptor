@@ -825,9 +825,6 @@ you are welcome to redistribute it under certain conditions.
     if args.t:
         test();
 
-    if not(args.services):
-        log.error("You must specify a one or more services S");
-        sys.exit(34);
 
     paths = args.services + [args.contract];
     for path in paths:

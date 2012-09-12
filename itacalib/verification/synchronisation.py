@@ -39,17 +39,25 @@ import random;
 log = logging.getLogger('synchronisation')
 
 
-log.setLevel(logging.INFO);
+#log.setLevel(logging.INFO);
 #log.setLevel(logging.DEBUG);
 #logging.basicConfig(level=logging.DEBUG);
 #logging.basicConfig();
 
-# Used in main()
-import argparse;
-import sys;
-import os;
-from xml.parsers.expat import ExpatError;
-import itacalib.XML.stsxmlinterface as xml2sts;
+import sys
+try:
+    # Used in main()
+    import argparse;
+    import sys;
+    import os;
+    from xml.parsers.expat import ExpatError;
+    import itacalib.XML.stsxmlinterface as xml2sts;
+except ImportError:
+    if sys.hexversion < 0x02070000:
+        print "This program (adaptor) only works with python 2.7 or above.";
+        sys.exit(7);
+    else:
+        raise;
 
 
 
