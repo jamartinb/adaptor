@@ -15,5 +15,5 @@
 # along with ITACA-Adaptor.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-__all__ = ["adaptor"]
+__all__ = ["adaptor", "condense_adaptor"]
 

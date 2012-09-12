@@ -15,4 +15,5 @@
 # along with ITACA-Adaptor.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-__all__ = ["dirgraphtest","dirgraphdicttest"];
+__all__ = []
+

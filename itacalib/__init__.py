@@ -15,5 +15,5 @@
 # along with ITACA-Adaptor.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-__all__ = ["model", "XML", "GL", "validation", "misc","tests","verification","adaptor"]
+__all__ = ["model", "XML", "GL", "tests","verification","adaptor"]
 

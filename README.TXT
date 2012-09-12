@@ -28,15 +28,37 @@ following:
  * itacalib/adaptor/adaptor.py - Contains the main script
  * itacalib/tests - Iclude the pyunit tests
 
-Don't forget to place the directory containing itaca and itacalib in the 
-PYTHONPATH environment variable. If that's your current folder, you can do it 
-by executing:
+
+Source packaging
+----------------
+
+To create a tarball ready for source distribution go to the root of the 
+repository and execute
+
+    > python2.7 setup.py sdist
+
+The package will be created in the dist directory
+
+
+
+Installing
+----------
+
+You can execute adaptor locally but don't forget to place the directory 
+containing itaca and itacalib in the PYTHONPATH environment variable. If 
+that's your current folder, you can do it by executing:
 
     > export $PYTHONPATH:$(pwd)
 
 Graphviz and gnuplot are recommended in order to plot the services and adaptors
 (these can be exported to the DOT language and visuaziled with Graphviz) and
 plotting graphs according to the measures given by learning adaptors.
+
+Alternativelly, for permanent installation you may execute:
+
+    > python2.7 setup.py install
+
+
 
 Some examples
 -------------
