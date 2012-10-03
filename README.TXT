@@ -70,10 +70,11 @@ These are a subset of the tests executed using:
 
     > python2.7 setup.py test
 
+In order to show help information, execute:
 
     > python2.7 -m itacalib.adaptor.adaptor -h
 
-Displays help information
+Finally, you can execute a specific example with the following command:
 
     > DIR=itaca/samples/adaptor/ecows11/; python2.7 -m itacalib.adaptor.adaptor \
         -c $DIR/contract-5.xml $DIR/SPIN_sink.xml $DIR/SPIN_source.xml \
