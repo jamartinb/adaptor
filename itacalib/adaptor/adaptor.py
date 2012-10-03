@@ -65,7 +65,7 @@ try:
     from xml.parsers.expat import ExpatError;
 except ImportError:
     if sys.hexversion < 0x02070000:
-        print "This program (adaptor) only works with python 2.7 or above.";
+        print("This program (adaptor) only works with python 2.7 or above.");
         sys.exit(7);
     else:
         raise;
@@ -384,7 +384,7 @@ class LearningAdaptor(DetContractAdaptor):
     def __init__(self,contract):
         DetContractAdaptor.__init__(self,contract);
         self.inhibited = set();
-        self.LIMIT_INHIBITED = sys.maxint;
+        self.LIMIT_INHIBITED = sys.maxsize;
         # __explored_states -- States which have been explored, \
         #   therefore actually learned
         self.__explored_states = set();
@@ -616,7 +616,9 @@ class ForgettingAdaptor(LearningAdaptor):
 class ThresholdAdaptor(ForgettingAdaptor):
 
 
-    _threshold = sys.maxint;
+    # - Changed for forward compatibility with python 3
+    #_threshold = sys.maxint;
+    _threshold = sys.maxsize;
 
     def __init__(self, contract):
         ForgettingAdaptor.__init__(self, contract);
@@ -853,17 +855,18 @@ you are welcome to redistribute it under certain conditions.
     contract = None;
     try:
         contract = stsxml.readXML(args.contract);
-    except ExpatError, message:
-        log.error('The contract file ("%s") could not be parsed: \n\t%s' % (args.contract,message));
+    except ExpatError as e:
+        log.error('The contract file ("%s") could not be parsed: \n\t%s' % \
+                (args.contract,str(e)));
         sys.exit(4);
 
     # Load services
     for filename in args.services:
         try:
             services.append(xml2sts.readXML(filename).getSTS());
-        except ExpatError, message:
+        except ExpatError as e:
             log.error('One of the given service files '+
-                      '("%s") could not be parsed: \n\t%s' % (file,message));
+                      '("%s") could not be parsed: \n\t%s' % (file,str(e)));
             sys.exit(5);
 
     # Write input in DOT files for services
@@ -1029,7 +1032,9 @@ you are welcome to redistribute it under certain conditions.
 
 
 def write_stats(samples, file, file_format):
-    def sum_if_numbers((x, y)):
+    def sum_if_numbers(point):
+        x = point[0];
+        y = point[1];
         if isinstance(y, str):
             return y;
         else:

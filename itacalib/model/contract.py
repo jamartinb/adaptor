@@ -295,7 +295,7 @@ class Contract:
     # Adds an argument definition to the contract
     def addDef(self,definition):
         self._defs[definition.getName()]=definition
-        print str(self._defs[definition.getName()])
+        print(str(self._defs[definition.getName()]))
         
     ##
     # Removes an argument definition from the contract.
@@ -476,7 +476,7 @@ def merge(a,b,parent,children):
                         match=e
                         matchek=ek
                         matchindex=oek
-                        print "MATCH FOUND!"
+                        print("MATCH FOUND!")
 
                 if match!=None:
                     newVector=v

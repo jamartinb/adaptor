@@ -54,7 +54,7 @@ try:
     import itacalib.XML.stsxmlinterface as xml2sts;
 except ImportError:
     if sys.hexversion < 0x02070000:
-        print "This program (adaptor) only works with python 2.7 or above.";
+        print("This program (adaptor) only works with python 2.7 or above.");
         sys.exit(7);
     else:
         raise;
@@ -666,9 +666,9 @@ you are welcome to redistribute it under certain conditions.
     for filename in args.services:
         try:
             services.append(xml2sts.readXML(filename).getSTS());
-        except ExpatError, message:
+        except ExpatError as e:
             log.error('One of the given service files '+ \
-                      '("%s") could not be parsed: \n\t%s' % (file,message));
+                      '("%s") could not be parsed: \n\t%s' % (file,str(e)));
             sys.exit(5);
 
     log.info("Synchronising...");

@@ -29,7 +29,7 @@
 
 import unittest;
 import itacalib.adaptor.adaptor;
-from adaptortest import ContractAdaptorTest;
+from .adaptortest import ContractAdaptorTest;
 import logging;
 
 from expected_results import *;

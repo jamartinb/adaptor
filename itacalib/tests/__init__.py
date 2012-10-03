@@ -40,10 +40,10 @@ def test_all():
                 for f in testfiles]
 
     # travis-ci.org does not set __package__
-    package = __package__+'.' if __package__ else ''
+    package = __package__+'.' if __package__ else 'itacalib.tests.'
+    testmodules = None
     if modules and package in modules[0]:
-        testmodules = [package+m.split(package)[1] 
-                        for m in modules]
+        testmodules = [package+(m.split(package)[1]) for m in modules]
     else:
         raise Exception("Couldn't load test files")
 
@@ -60,7 +60,7 @@ def test_all():
             # It only allows the "dotted" name
             try:
                 suite.addTest(unittest.defaultTestLoader.loadTestsFromName(t))
-            except Exception, e:
+            except Exception as e:
                 raise Exception("Couldn't load test module: "+repr(t),e)
 
     return suite

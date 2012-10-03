@@ -37,7 +37,7 @@ import itacalib.XML.stsxml as stsxml;
 import itacalib.XML.dot as dot;
 import logging, os, xml;
 
-from expected_results import *;
+from .expected_results import *;
 
 
 ## Logger for this module
@@ -82,8 +82,8 @@ class AdaptorTest(unittest.TestCase):
         file = files[0];
         try:
             contract = stsxml.readXML(file);
-        except xml.parsers.expat.ExpatError, message:
-            log.fatal('The contract ("%s") could not be parsed: \n\t%s' % (file,message));
+        except xml.parsers.expat.ExpatError as e:
+            log.fatal('The contract ("%s") could not be parsed: \n\t%s' % (file,str(e)));
         return contract;
 
 
@@ -97,8 +97,8 @@ class AdaptorTest(unittest.TestCase):
         try:
             for file in files:
                 services.append(xml2sts.readXML(file).getSTS());
-        except xml.parsers.expat.ExpatError, message:
-            log.fatal('One of the given files ("%s") could not be parsed: \n\t%s' % (file,message));
+        except xml.parsers.expat.ExpatError as e:
+            log.fatal('One of the given files ("%s") could not be parsed: \n\t%s' % (file,str(e)));
         return services;
 
 
