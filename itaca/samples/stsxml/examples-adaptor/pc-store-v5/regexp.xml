@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<contract>
+	<vectors>
+		<vector id="Vreq">
+			<componentVector eventName="request" eventType="OUT" index="buyer"/>
+			<componentVector eventName="request" eventType="IN" index="supplier"/>
+		</vector>
+		<vector id="Vstop">
+			<componentVector eventName="stopp" eventType="OUT" index="buyer"/>
+			<componentVector eventName="*" eventType="TAU" index="supplier"/>
+		</vector>
+		<vector id="Vbuy">
+			<componentVector eventName="buy" eventType="OUT" index="buyer"/>
+			<componentVector eventName="buy" eventType="IN" index="supplier"/>
+		</vector>
+	</vectors>
+	<STS>
+		<states>
+			<state final="True" id="R0" initial="True"/>
+		</states>
+		<transitions>
+			<transition label="Vreq" source="R0" target="R0"/>
+			<transition label="Vstop" source="R0" target="R0"/>
+			<transition label="Vbuy" source="R0" target="R0"/>
+		</transitions>
+	</STS>
+</contract>

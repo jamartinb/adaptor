@@ -42,7 +42,7 @@ import pstats;
 log = logging.getLogger('adaptor_optimisation_test')
 
 #log.setLevel(logging.DEBUG);
-log.setLevel(logging.INFO);
+#log.setLevel(logging.INFO);
 
 # Load default logging configuration.
 #logging.basicConfig(level=logging.DEBUG);
@@ -53,7 +53,7 @@ log.setLevel(logging.INFO);
 class OptimisationAdaptorTest(LearningAdaptorTest):
 
 
-    LIMIT = 20;
+    LIMIT = 14;
 
     REPETITIONS = 2;
 
@@ -95,6 +95,7 @@ class OptimisationAdaptorTest(LearningAdaptorTest):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO);
     suite = OptimisationAdaptorTest.suite();
     test = lambda :unittest.TextTestRunner().run(suite);
     cProfile.run('test()','optimisation.stats');

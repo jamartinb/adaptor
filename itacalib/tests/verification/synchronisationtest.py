@@ -38,7 +38,7 @@ import logging, os, xml;
 log = logging.getLogger('synchronisationtest')
 
 # Load default logging configuration.
-logging.basicConfig(level=logging.DEBUG);
+#logging.basicConfig(level=logging.DEBUG);
 #logging.basicConfig();
 
 class SynchroniserTest(unittest.TestCase):
@@ -116,4 +116,5 @@ class SynchroniserTest(unittest.TestCase):
 
     
 if __name__ == "__main__":
+    logging.basicConfig();
     unittest.main();

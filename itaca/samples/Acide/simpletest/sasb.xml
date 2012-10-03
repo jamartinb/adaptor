@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<contract>
+	<vectors>
+		<vector id="vector_0">
+			<componentVector eventName="a" eventType="IN" index="serva"/>
+			<componentVector eventName="c" eventType="OUT" index="servb"/>
+		</vector>
+		<vector id="vector_1" observable="true">
+			<componentVector eventName="b" eventType="OUT" index="serva"/>
+		</vector>
+	</vectors>
+	<LTS>
+		<states>
+			<state final="True" id="s0" initial="True"/>
+		</states>
+		<transitions>
+			<transition label="vector_0" source="s0" target="s0"/>
+			<transition label="vector_1" source="s0" target="s0"/>
+		</transitions>
+	</LTS>
+</contract>

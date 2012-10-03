@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<interface height="114" width="201" ports="left">
+	<signatures>
+		<signature name="c"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="c_EM" name="c" type="OUT"/>
+		</labels>
+		<states>
+			<state final="True" id="1" x="75" y="88"/>
+			<state id="0" initial="True" x="122" y="47"/>
+		</states>
+		<transitions>
+			<transition label="c_EM" source="0" target="1" x="91" y="53"/>
+		</transitions>
+	</protocol>
+</interface>

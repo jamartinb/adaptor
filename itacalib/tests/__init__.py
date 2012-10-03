@@ -59,4 +59,3 @@ def test_all():
 
     return suite
 
->>>>>>> Stashed changes

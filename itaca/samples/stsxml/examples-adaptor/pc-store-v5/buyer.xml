@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<interface>
+	<signatures>
+		<signature name="buy"/>
+		<signature name="request"/>
+		<signature name="stopp"/>
+	</signatures>
+	<protocol>
+		<labels>
+			<label id="request_EM" name="request" type="OUT"/>
+			<label id="buy_EM" name="buy" type="OUT"/>
+			<label id="stopp_EM" name="stopp" type="OUT"/>
+		</labels>
+		<states>
+			<state id="1"/>
+			<state id="0" initial="True"/>
+			<state final="True" id="3"/>
+			<state id="2"/>
+			<state id="4"/>
+		</states>
+		<transitions>
+			<transition label="request_EM" source="0" target="1"/>
+			<transition label="TAU" source="1" target="2"/>
+			<transition label="stopp_EM" source="2" target="3"/>
+			<transition label="TAU" source="1" target="4"/>
+			<transition label="buy_EM" source="4" target="3"/>
+		</transitions>
+	</protocol>
+</interface>
