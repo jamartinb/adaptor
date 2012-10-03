@@ -74,7 +74,7 @@ class SynchroniserTest(unittest.TestCase):
         @param paths: Sequence of filenames within parent folder
         @return: Sequence of evaluated paths
         """
-        prefix =os.path.abspath('.');
+        prefix =os.path.dirname(__file__);
         return [os.path.join(prefix, parent+path) for path in paths];
 
 
