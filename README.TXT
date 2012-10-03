@@ -1,4 +1,4 @@
-ITACA - Adaptor
+ITACA - Adaptor [![Build Status](https://secure.travis-ci.org/jamartinb/adaptor.png)](http://travis-ci.org/jamartinb/adaptor)
 ===============
 
 This package includes the files require to synthesise or learn behavioural
@@ -66,6 +66,10 @@ Some examples
     > python2.7 -m itacalib.adaptor.adaptor -t
 
 Executes the tests located in itacalib/tests.
+These are a subset of the tests executed using:
+
+    > python2.7 setup.py test
+
 
     > python2.7 -m itacalib.adaptor.adaptor -h
 
