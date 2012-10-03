@@ -38,8 +38,11 @@ def test_all():
     # @TODO: I'm sure this can be done better
     modules = ['.'.join(f.split('.py')[0].split(os.path.sep))
                 for f in testfiles]
-    if modules and (__package__+'.') in modules[0]:
-        testmodules = [__package__+'.'+m.split(__package__+'.')[1] 
+
+    # travis-ci.org does not set __package__
+    package = __package__+'.' if __package__ else ''
+    if modules and package in modules[0]:
+        testmodules = [package+m.split(package)[1] 
                         for m in modules]
     else:
         raise Exception("Couldn't load test files")
@@ -55,7 +58,10 @@ def test_all():
         except (ImportError, AttributeError):
             # else, just load all the test cases from the module.
             # It only allows the "dotted" name
-            suite.addTest(unittest.defaultTestLoader.loadTestsFromName(t))
+            try:
+                suite.addTest(unittest.defaultTestLoader.loadTestsFromName(t))
+            except Exception, e:
+                raise Exception("Couldn't load test module: "+repr(t),e)
 
     return suite
 
