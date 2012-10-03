@@ -15,4 +15,4 @@
 # along with ITACA-Adaptor.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-__all__ = ["misc","discovery","verification","adaptor","model"];
+__all__ = ["verification","adaptor","model"];
