@@ -15,4 +15,48 @@
 # along with ITACA-Adaptor.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+
 __all__ = ["verification","adaptor","model"];
+
+
+def test_all():
+    import os
+    import unittest
+    # Get the current folder
+    here = os.path.dirname(__file__)
+
+    # Get the path to tests files
+    testfiles = [os.path.join(d,f) for (d, subdirs, files) in os.walk(here)
+                                     for f in files
+                                     if os.path.isfile(os.path.join(d,f))
+                                     and f.endswith(".py")
+                                     and "__init__.py" != f
+                                     # This is automatically created, why?
+                                     and "dststest.py" != f]
+
+    # Translate paths to dotted modules
+    # @TODO: I'm sure this can be done better
+    modules = ['.'.join(f.split('.py')[0].split(os.path.sep))
+                for f in testfiles]
+    if modules and (__package__+'.') in modules[0]:
+        testmodules = [__package__+'.'+m.split(__package__+'.')[1] 
+                        for m in modules]
+    else:
+        raise Exception("Couldn't load test files")
+
+    suite = unittest.TestSuite()
+
+    for t in testmodules:
+        try:
+            # If the module defines a suite() function, call it to get the suite.
+            mod = __import__(t, globals(), locals(), ['suite'])
+            suitefn = getattr(mod, 'suite')
+            suite.addTest(suitefn())
+        except (ImportError, AttributeError):
+            # else, just load all the test cases from the module.
+            # It only allows the "dotted" name
+            suite.addTest(unittest.defaultTestLoader.loadTestsFromName(t))
+
+    return suite
+
+>>>>>>> Stashed changes

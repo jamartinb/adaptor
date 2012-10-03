@@ -20,14 +20,17 @@
 
 import os
 
-from distutils.core import setup
+from setuptools import setup, find_packages
+#from distutils.core import setup
 
-print list(os.walk('itaca/samples'))
+#print list(os.walk('itaca/samples'))
 
-packages = [root for (root, dirs, files) in os.walk('itacalib')]
-packages = list(set(packages))
-packages.remove('itacalib/adaptor/gnuplot')
-packages.append('itaca')
+packages = find_packages()
+# - The line above replaced the four below
+#packages = [root for (root, dirs, files) in os.walk('itacalib')]
+#packages = list(set(packages))
+#packages.remove('itacalib/adaptor/gnuplot')
+#packages.append('itaca')
 
 files = ['/'.join((d+'/'+f).split('/')[1:])
         for (d, subdirs, files) in os.walk("itaca/samples")
@@ -44,8 +47,10 @@ setup(name='ITACA-Adaptor',
         author_email='jose.antonio.martin.baena@gmail.com',
         url='https://github.com/jamartinb/adaptor',
         download_url='https://github.com/jamartinb/adaptor/tarball/master',
+        install_requires=['distribute'],
         packages = packages,
         package_data = {'itaca':files},
         license="GPLv3",
         scripts=["scripts/adaptor", "scripts/synchronisation"],
+        test_suite="itacalib.tests.test_all",
         );
