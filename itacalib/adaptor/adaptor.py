@@ -244,6 +244,30 @@ class ContractAdaptor(STS):
 
 
 
+class DynamicContractAdaptor(ContractAdaptor):
+    """A ContractAdaptor which does not store states nor transitions."""
+
+
+    def __init__(self, contract):
+        super(DynamicContractAdaptor, self).__init__(contract);
+
+
+    def addState(self, state):
+        assert len(self.getStates()) == 0
+        pass
+
+
+    def addTransition(self, transition):
+        assert len(self.getTransitions()) == 0
+        pass
+
+
+    def addFinal(self, state):
+        assert len(self.getFinals()) == 0
+        pass
+
+
+
 class DetContractAdaptor(STS):
     """An adaptor directly based on the contract but forcing determinism.
 
@@ -315,6 +339,8 @@ class DetContractAdaptor(STS):
                 dstates = set([t.getTarget() \
                     for t in indeterministic_transitions \
                     if t.getLabel() == label]);
+
+                # Instantiate and add new states and transitions
                 dstate = self._getNewState(dstates);
                 toReturn.add(self._createTransition(state,label_instance,dstate));
 
@@ -361,6 +387,36 @@ class DetContractAdaptor(STS):
         log_det.debug("Learned transition: %s" % transition);
         self.addTransition(transition);
         return transition;
+
+
+
+class DynamicDetContractAdaptor(DetContractAdaptor):
+    """A DetContractAdaptor which does not store states nor transitions"""
+
+
+    def __init__(self, contract):
+        STS.__init__(self);
+        # This is the quid of the overriden constructor
+        self._inner = DynamicContractAdaptor(contract);
+        self.STATE_SEPARATOR = "!!";
+        # Same initial state as the inner ContractAdaptor
+        initial_state_name = self._inner.getInitial();
+        self.setInitial(initial_state_name);
+
+
+    def addState(self, state):
+        assert len(self.getStates()) == 0
+        pass
+
+
+    def addTransition(self, transition):
+        assert len(self.getTransitions()) == 0
+        pass
+
+
+    def addFinal(self, state):
+        assert len(self.getFinals()) == 0
+        pass
 
 
 

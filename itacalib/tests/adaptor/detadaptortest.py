@@ -66,6 +66,27 @@ class DetContractAdaptorTest(ContractAdaptorTest):
         self.assert_successful_example(result,expected);
 
 
+
+class DynamicDetContractAdaptorTest(DetContractAdaptorTest):
+    
+
+    def buildAdaptor(self,contract):
+        """Instantiates an Adaptor with the given contract
+
+        @return: An Adaptor with the given contract
+        """
+        return itacalib.adaptor.adaptor.DynamicDetContractAdaptor(contract);
+
+
+    def assert_check_adaptor(self, adaptor):
+        super(DynamicDetContractAdaptorTest,self).assert_check_adaptor(adaptor);
+        self.assertEqual(len(adaptor.getStates()),0);
+        self.assertEqual(len(adaptor.getTransitions()),0);
+        self.assertTrue(adaptor.getInitial());
+        self.assertEqual(len(adaptor.getFinals()),0);
+
+
+
 del ContractAdaptorTest
 
 if __name__ == "__main__":

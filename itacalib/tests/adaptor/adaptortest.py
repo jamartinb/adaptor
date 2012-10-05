@@ -140,12 +140,18 @@ class AdaptorTest(unittest.TestCase):
         services.append(adaptor);
         syn = self.buildSynchroniser();
         to_return = syn.synchronise(services);
+        self.assert_check_adaptor(adaptor);
         if self.WRITE_DOT:
             self.writeStsDot("adaptor",adaptor);
             self.writeTracesDot("traces",to_return);
             #print "Hello World!: ", to_return;
             log.debug("==================================");
         return to_return;
+
+
+    def assert_check_adaptor(self, adaptor):
+        """Verifies that the adaptor was generated properly"""
+        pass;
 
 
     def assert_successful_example(self, result, expected):
@@ -194,6 +200,22 @@ class ContractAdaptorTest(AdaptorTest):
         #self.assertEqual(result,expected);
         #self.assertEqual(len(result),len(expected));
         self.assert_successful_example(result,expected);
+
+
+
+class DynamicContractAdaptorTest(ContractAdaptorTest):
+
+
+    def buildAdaptor(self, contract):
+        return DynamicContractAdaptor(contract)
+
+
+    def assert_check_adaptor(self, adaptor):
+        super(DynamicContractAdaptorTest,self).assert_check_adaptor(adaptor);
+        self.assertEqual(len(adaptor.getStates()),0);
+        self.assertEqual(len(adaptor.getTransitions()),0);
+        self.assertTrue(adaptor.getInitial());
+        self.assertEqual(len(adaptor.getFinals()),0);
 
 
 

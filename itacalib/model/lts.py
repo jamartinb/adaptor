@@ -331,7 +331,7 @@ class Transition(object):
 
 ##
 # Generic LTS class. 
-class LTS:
+class LTS(object):
 
     def __init__(self):
         self._S = {}
